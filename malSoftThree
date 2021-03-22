@@ -1,0 +1,148 @@
+# Author: Ash+
+# Date Created: ? Feb 2 8:42:00 PM EST 2021
+# Last Date Modified: Fri Mar  5 08:36:38 PM EST 2021
+# File Name: malSoftThree
+# Course: CPS 471
+# Instructor: Baldwin
+
+~~
+Payload - Attack agents bots:
+	* Overtaking internet-connected machines to launch / manage attacks
+	* Uses of bots / botnets:
+		- DDOS
+		- Mass spammer
+		- Sniffing traffic
+		- Keylogging
+		- Spread of malware
+		- Installs advert add-ons and browser helpers that are malicious
+		- Attacks IRC chats
+		- Manipulates online polls
+
+Remote Control Facility (RCF):
+	* Difference between bots and worms:
+		- Worms propogate and activates itself
+		- Bots capable of being controlled by 'hub'
+
+	* Means of implementing RCF:
+		- Via IRC servers / channels
+		- More recent bots uses ports like HTTP
+		- Some bots uses p2p protocols like darknet capable (hard to detect)
+
+Payload - Information theft / Keyloggers and Spyware:
+	* Keylogger:
+		- Captures key strokes to monitor sensitive information
+		- Filters to capture only important info (password,  username)
+	
+	* Spyware:
+		- Compromised machine being spyed upon
+		- Monitoring of history / browser activity
+		- Redirecting of web page to fake sites
+		- Used by orgs like google, amazon <-- Dogs
+
+Payload - Info Theft Phishing:
+	* Exploits social engineering to masquerade a trusted source,
+	  oh look your amazon package has arrived, click here type thing
+	* Includes URL in spam email that linsk to fake website mimicing login pages
+	  of banks, and other sites
+	* USUALLY says 'URGET ACTION REQUIRED'
+	* Captured credentials are exploited 
+	* Spear-phishing:
+		- Recipients are carefully researched
+		- Crafted emails to convince authenticity
+
+
+~~
+Worm countermeasures:
+	* Countermeasures for worms / virus are overlapped
+	* Anti-virus software obv
+	* Network activity / usage monitoring (can even automate)
+	* Signature based worm scan filtering
+	* Filter based worm containment ??
+	* Payload classification based ??
+	* Threshold random walk ??
+	* Limits rate && rate halting
+
+Payload - Stealthing backdoor: (CAN DO BETTER CMON NOW......)
+	* Backdoor / trapdoor same thing
+	* Secret entry point into program allowing attacker to gain access and
+	  bypass security procedures
+	* Backdoors installed in some apps for programmers and debuggers
+	* Difficult to implement OS controls for backdoor in apps
+
+Payload - Stealthing rootkit:
+	* Set of hidden programs installed on machine to maintain covert access
+	* Subverts mechanism that monitor and report on processes, files and 
+	  registries on machine
+	* Gives admin/root privi to attacker:
+		- Can change program / files
+		- Monitor processes
+		- Send and receive network traffic
+		- Backdoor access on demand
+
+Rootkit classification characteristics:
+	* Persistance, can be kept after reboot (INSANE)
+	* Memory based, ??
+	* User mode, can have normal user privi
+	* Kernel mode, HIGHLY PRIVI LEVEL HOLY FUCK
+	* VM based, can compromise host from VM
+	* External mode, resides in BIOS or no protection states 
+
+System call table modification by rootkit:
+	* Replaces normal routine with its own rootkit code
+	* Basically changes address from normal location to its own location
+	* This can execute actions that attacker wants instead of wat is intended
+
+
+~~
+Malware countermeasure approaches:
+	* Prevention elements:
+		- Stronger policy
+		- Awareness to phishing, spear phishing, education employees
+		- Vulnerability mitigation, patching systems, external systems
+		- Threat mitigation
+	
+	* If failure of prevention:
+		- Detection
+		- Identification
+		- Removal
+
+Gens of antivirus software:
+	* Cat && mouse game basically
+	* 1st Gen: Simple scanner, detects only known malware (static malware)
+	* 2nd Gen: Heuristic scanner, uses rules for probable malware
+	* 3rd Gen: Activity traps, identifies malware by actions rather by structure
+	* 4rth Gen: Package containing multiple antivirus methods, includes
+	  scanning, activity traps and access control capability
+
+Generic Decryption (GD):
+	* Enables antivirus to detect polymorphic malware
+	* Executables are run through GD scanner containing elements:
+		- CPU emulator
+		- Virus signature scanner
+		- Emulation control module
+		- Problem with GD scanner, how long to run each interpretation
+	
+	* GD uses mini-vm machine
+
+Host- based behavior-blocking software:
+	* Monitors programs in real time for malicious actions
+	* Integrates with OS
+	* Blocks malicious actions before it affects machine
+	* Blocks software in real time, advantage over antivirus detection
+	  and virus detection techniques, like fingerprinting and heuristics
+	* Basic limitation:
+		- Malicious code must run before its behaviour can be identified
+		- So, sometimes harm is done before it's recognized and blocked
+
+Perimeter scanning Approaches:
+	* Prevention of attacks due to blocking traffic before it gets to system
+	* Antivirus software included in email and web proxy services running
+	  in firewall and IDS
+	* Scans malware, rather than detects behavior 
+	* Ingress method, traffic is coming in so detecting traffic coming to org
+	* Egress method, scans traffic leaving your network via comprimised machines
+
+
+~~
+
+

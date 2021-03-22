@@ -1,0 +1,64 @@
+				January 26 5:13 - 5:26
+
+# Author: Ash+
+# Date Created: ? January 26 5:13 PM EST 2021
+# Last Date Modified: ?
+# File Name: introThree
+# Course: CPS 471
+# Instructor: Baldwin
+
+~~
+Attack Surfaces: Reachable + exploitable vulners in system:
+	* Open ports that are listening (backdoors)
+	* Services in firewall
+	* Code processor for XML, email, etc
+	* SQL (sql injections)
+	* Vulnerable employee (social engineering)
+
+AS Categories:
+	* Network:
+		- Over the internet attacks
+		- Dos / disruption of comms && more
+	* Software:
+		- Vulners in application, or OS code
+		- Web server software (?)
+	* Human:
+		- Social engineering
+		- Human error / Insiders
+
+Attack Tree:
+	* Root: Goal of attack
+	* White sub-nodes: Ways to achieve said goal:
+		- user credential compromise
+		- Injection of commands
+	* Green sub-nodes: Events:
+		- Worms
+		- Social Engineering
+		- Phishing / Pharming
+
+~~
+Creating Security Strategy:
+	* Policy: Have to stay within certain rules and regulations (nothing illegal)
+	* Implementation: Course of action:
+		- Prevention
+		- Detection
+		- Response
+		- Recovery
+	* Assurance: Degree of confidence of these measures
+	* Evaluation: Examining how good these measures are with respect to criteria
+
+Implementation Issues:
+	* Cost-benefit: Cheaper to prevent or recover
+	* Risk analysis: Should we protect said info / Asset? 
+	* Laws and Customs: Is measure illegal? Is it hard for employees to do?
+
+Practical Issues:
+	* Org problems:
+		- Power issues
+		- Financial state
+	* People problems:
+		- Outsider && insider
+		- Social engineering
+
+~~
+DONE! Homework 1 assigned 	

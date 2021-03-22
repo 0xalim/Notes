@@ -1,0 +1,103 @@
+# Author: Ash+
+# Date Created: ? January 6:25:00 PM EST 2021
+# Last Date Modified: Fri Mar  5 08:18:17 PM EST 2021
+# File Name: malSoftOne
+# Course: CPS 471
+# Instructor: Baldwin
+
+~~
+Malware: Program injected onto target covertly; to harm CIA of data, applications,
+	 or OS. Or to annoy / disrupt the victim.
+
+Classes of Malware:
+	* Based on how it spreads / propogates (worms / viruses)
+	* Actions / payloads it performs on victim (trojans / bots)
+
+Propogation:
+	* Virus that spread to other systems 
+	* Exploit of software vulners by worms to replicate itself
+	* Social engineering attacks to bypass security
+
+Payload actions:
+	* Corrupt system data / files
+	* Addition to botnet (zombify)
+	* Key logging
+	* Stealthing for passive recon
+
+Toolkits: 'crimeware' basically packages that get deployed onto a system that
+	  contains a bundle of mechanics / paylods modules that can be deployed
+	  developed 90's and early 00's.
+		- Zeus:
+			Trojan horse malware runs on windows; steals bank info
+			through man in the browser keylogging. Also
+			has ransomware. Spread through drive-by-downloads && phishing.
+			Tricks users into providing customer support for money. 
+			Mastermind was Bx1; arrested by FBI in thailand. Many other
+			people used it to transfer money from bank account through 
+			mules to outside of the US. 
+		- Blackhole:
+			Appeared on Malwox (underground russian webforum). Created
+			by HodLum and Paunch. Delivers payload to victims system.
+		- Sakura
+		- Pheonix
+
+~~
+Attack Sources: Changed from inidivual developers to:
+	* Politically backed attackers
+	* outtsider && insider
+	* Criminals
+	* Organized crime
+	* Orgs that sell to companies && nations
+	* National government agencies
+
+-> thus giving rise to motivation to the further development of better malware
+and an underground economy that is involved in the sale of attack kits, compromised
+hosts and stolen information
+
+
+Advanced Persistent Threat: Groups of hackers and attackers that deploy malware 
+for theft of data or other resources from their target (which are business or political)
+They are state sponsored orgs / criminal enterprises. Differ from other types of attaks
+due to their stealthy efforts and persistance over a long period of time. Profiles:
+	- Aurora: Operation aurora backed by Elderwood ties with peoples liberation
+		  army. China. Modification of source code at high tech companies,
+		  security and defense contractors.
+	- RSA: Stole info from RSA security form on particular product for 2FA. 
+	- APT1: Chinese cyber espionage unit
+	- Stuxnet: Targeted Iranian SCADA systems via PLC's. Building of weapon for war
+
+
+APT characteristics:
+	* Aim:
+		- Theft of property / security && infrastructure
+		- Physical disruption of infrastructure
+	* Technique:
+		- Social engineering
+		- Spear phishing
+		- Drive by downloads from phishing links
+	* Intent:
+		- Infection of system with malware that propogates && executes payloads
+		- Continue keeping access to the target via backdoors
+
+~~
+Virus:
+	* Modifies programs to replicate itself and spread throughout more networks
+	* Has same privilage level as executable program
+	* Specific to operating systems and hardware
+
+Virus components:
+	* Infection mechanism: 
+		- Replicates / propogates
+	* Trigger:
+		- What makes the payload activate
+	* Payload:
+		- Damage / activity
+
+
+Virus phases:
+	* Dormant 
+	* Trigger
+	* Propogation
+	* Execution
+
+~~ 

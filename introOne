@@ -1,0 +1,58 @@
+				January 2:24 - 2:43
+
+
+# Author: Ash+
+# Date Created: ? 
+# Last Date Modified: ?
+# File Name: introOne
+# Course: CPS 471
+# Instructor: Baldwin
+~~
+NIST definition: Protection from automated information system to preserve the
+		 integrity, availability, and confidentiality of information
+		 system resources.
+
+Course Objective: 
+	* Understand fundamentals of Cyber Security 
+	* Practical experience in hardening a system (blue teaming)
+
+Fundamental Topics:
+	* Overview (concepts, design principles && attack surfaces)
+	* Cryptography
+	* Authentication
+	* Access control
+	* Auditing
+	* Databases
+	* Malicious software
+	* Dos
+	* IDS
+	* Firewall && prevention
+	* Operating system security
+	* Law && ethics
+	* Cryptographic algorithms
+	* System admin
+
+
+CIA Triad:
+	* Confidentiality: Keeping things away from unauthorized users
+	* Integrity: Unauthorized modification
+	* Availibity: Keeping things up (Dos)
+
+Impact levels:
+	* Towards assets, individuals, or the org. itself:
+		- Low: Limited effect
+		- Moderate: Serious effects
+		- High: Catastrophic 
+
+Challenges:
+	* Not easy
+	* Attacks on security features are possible
+	* Additional algorithms are needed
+	* 1 weakness is needed from attackers
+	* Orgs. often do not see advantage of security until failure
+	* Constant monitoring is needed
+	* CompSec. is an afterthought of design (which is bad)
+	* User-friendly features bottlenecks
+
+~~
+	

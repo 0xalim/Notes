@@ -1,0 +1,475 @@
+# Author: Ash+
+# Date created: Wed Mar 17 10:01:36 PM EDT 2021
+# Last Date Modified: Fri Mar 19 09:36:50 PM EDT 2021
+# File Name: firewall+IPS
+# Course: CPS 471
+# Instructor: Baldwin
+
+
+# This is chapter 9 of CompSec Principles && Practice (William Stallings)
+# Firewalls + IPS, prior databases + cloudSec; funneled.
+
+Objectives:
+	* Design goals + characteristics (4) of firewalls
+	* Firewall packet filtering + stateful inspection
+	* App + circuit level gateways
+	* Characteristics of bastion host 
+	* Advantages of host-based firewalls
+	* DMZ network + example services running on a DMZ network
+	* Internal vs external firewall
+	* IPS vs Firewall vs UTM
+	* Locations of IPS + ISP use
+
+firewall:
+	* inserted between premises network + internet as a security wall
+	* goal: protect internal network from internet-based attacks + single
+		choke point where security + auditing is easy accomplish
+
+designGoals:
+	* all traffic (ingress/egress) passes through firewall
+	* only traffic that follows org. policy is allowed to pass
+	* firewall is immune to penetration (good os, hardened)
+
+accessPolicy:
+	* planning + implementation phase of firewall
+	* lists authorized traffic
+	* types of authTraffic:
+		- app protocol: based on app protocol data, used by app-level 
+			gateway. SMTP / HTTP
+	
+		- ipadd + protocol vals: based on source+dest + ports + direction
+			used by packet filter + stateful inspection firewalls
+	
+		- user identity: based on userIdentity, IPSec
+		- network activity: time of request, business hours, rate of 
+			request
+
+firewallCapabilities:
+	* define single choke point (military checkpoint), protection against
+	  vulner services, unauthorized users, ip spoofing + routing 
+
+	* provides location for other monitoring services (audits + alarms)
+	* (??) network address translator, map local add to internet add, 
+		network management function that audits + logs internet usage
+
+	* serve as platform for IPSec (tunnel mode, chp. 22), virtual priv networks
+
+firewallLimitations:
+	* cannot protect against attacks that bypass it. 
+	* cannot fully protect vs internal attacks
+	* misconfigured wireless LAN can be accessed from outside
+	* compromised machines brought inside are good vs firewalls
+
+typesOfFirewalls:
+	* passive filter: if it meets criteria, it goes in
+	* negative filter: reject packets that meet criteria
+	* packet filtering firewall
+	* stateful inspection firewall: (state info db?)
+	* application proxy firewall (comm between 2 application layers)
+	* circuit-level proxy firewall (comm of 2 transport layers)
+
+packetFilteringFirewall:
+	* applies set of rules to ingress/egress ip packets; then forwards or drops
+	* filters packets going both directions
+	* filtering rules:
+		- source ip
+		- dest ip
+		- source+dest transport level add: tcp/udp protocols
+		- ip protocol field: 'defines transport protocol' (??)
+		- interface: firewall with 3 or more 3, which interface did
+			the packet come from / destined for
+
+	* basically this filtering, filters headers in ip/tcp; if it matches to
+	  one of the rules then we drop/forward based on policy. otherwise, 
+	  default action
+
+	* default discard = for orgs like governments + business
+	* default forward = orgs like universities
+	* advantage:
+		- simplicity
+		- transparent to users 
+		- very fast
+	
+	* weakness:
+		- cannot block app-specific vulners (vulner to email client, etc)
+		- logging is limited (source, dest, traffic type)
+		- do not support advanced userAuth 
+		- vulnerable to TCP/IP specification and protocol stack, like
+		  'network layer address spoofing'. OSI layer 3 altering.
+		
+		- improper config = breach. easy to allow traffic that should not be
+		  by accident
+
+	* countermeasures:
+		- ipadd spoofing: drop packets from internal ip's from external 
+		  interface. usually implemented at router
+	
+		- source routing attacks: drop all packets from source station, 
+		  these typically bypass measures that do nt analyze source routing
+
+		- tiny fragment attacks: attacker uses ip fragmentation, forcing 
+		  tcp header into separate packet fragments. countermeasure is to 
+		  require minimum amount of info from first packet, if first packet
+		  is rejected then reject all subsequent fragments
+
+statefulInspectionFirewall:
+	* background info:
+		- server port < 1024 (popular ports, 24 for smtp)
+		- client port > 1024 < 65535 (dynamic/less popular ports)
+		- vulnerability for unauthorized users
+
+	* stateful packet inspection creates directory of outbound tcp connections,
+	  each entry of established connections. packet filter will only allow 
+	  incoming traffic to these > 1024 < 65535 ports for those packets that
+	  fit the entry in the directory of tcp connections.
+	
+	* stateful packet vs packet filtering:
+		- stateful records info about tcp connections
+		- keeps track of sequence number (prevent session hijacking) 
+		- inspect some application data for popular protocols (ftp, etc)
+
+applicationLevelGateway:
+	* application proxy, relay for application-level traffic
+	* user provides user/pass to connect to remote, if authorized then 
+	  gateway contacts app on remote host and relays TCP segments that has
+	  the app data.
+
+	* if gateway does not support proxy code for specific app, service cannot
+	  be support, and will be dropped
+
+	* advantage:
+		- can be configured to onlly allow specific features of an app,
+			while disabling all other features.
+
+		- more secure than packet filtering, instead of combination for 
+			tcp/ip-level, app-level gateway only needs to accept a 
+			couple allowed applications. 
+
+		- easy to log + audit incoming traffic at app-level
+
+	* disadvantage:
+		- additional processing overhead per connection
+		- gateway has to exame and forward all traffic in both directions
+
+circuitLevelGateway:
+	* circuit-level proxy
+	* does not allow end-to-end tcp connections; instead a connection from 
+	  itself to inner host, and connection from itself to outer host
+	
+	* does not look at the contents of the tcp segments, instead determines
+	  which connections will be allowed. 
+
+	* because it doesn't examine contents of the tcp segments, there are no 
+	  overhead for outgoing data. only examinses (+overhead) for incoming 
+	  app data for forbidden functions
+
+	* SOCKS:
+		- client-server app for tcp+udp 
+		- securely use services of a network firewall
+		- 'shim-layer' between app-transport layer
+		- components:
+			- socks server, unix-based firewall (can be windows)
+			- socks clienet library, internal hosts
+			- socks-ified version of ftp, telnet. which uses
+			  recompilation of relinking of tcp-based client apps, or
+			  use of alternate dynamically loaded libraries, to use
+			  encapsulation routines in the socks library
+		
+		- tcp-client opens connection to socks server system on port 1080,
+		  if request succeeds, client is negotiated for correct
+		  authentication method, sends relay and if server agrees then it 
+		  opens up a connection.
+
+		- udp-connection is similar, just open a tcp connection and send
+		  the udp datagrams. as long as tcp-connection is open, then 
+		  all is good
+	
+bastionHost:
+	* critical secure system
+	* platform for app/circuit-level gateways
+	* characteristics:
+		- secure version of os, hardened
+		- only essential stuff installed, proxy apps for dns, ftp, http, etc
+		- extra authentication, proxy server has it's authentication too
+		- proxy configured to accept only some standard app command set
+		- limited command/features to subset system on protected network
+		- each proxy has audit information logging all traffic through it
+		- proxy modules are small softwar packages, easy to patch and 
+			find vulners due to simplicity of package
+	
+		- proxies are independant of other proxies, so uninstalling proxies
+			do not affect the operation of another proxy + install easy
+		
+		- proxy performs no disk access besides initial config read, making
+			it hard for attackers to run trojan horse sniffers, etc
+
+		- proxies run as nonprivi user, in secure bastion host
+
+hostBasedFirewalls:
+	* module to be installed / added on 
+	* restricts packet flow
+	* host-based firewalls usually in server
+	* advantages: (server/workstation based)
+		- tailored filtering rules, for policy
+		- protection independant of topology (ingress/egress traffic through
+			the firewall)
+
+		- conjunction with stand-alone firewalls is good
+		- new server install does not impede operations due to having to 
+			configure firewall settings
+
+personalFirewall:
+	* used in home / intranet environments
+	* module on machine
+	* firewall can be hosted on router connecting all machines
+	* less complex than server/stand-alone based firewalls
+	* main goal:
+		- deny unauht. remote access
+		- sniff traffic for malware/worms
+		- netfilter on linux, pf on bsd+mac
+		- 'stealth mode': drop all packets to make it seem ur not present
+		- drop all incoming UDP packets
+		- supports logging
+
+DMZNetworks:
+	* houses systems that are externally accessible but need some protection
+	* web sites, emai lservers, dns, etc
+	* external firewall provdes basic level protection for DMZ + internal network
+	* internal firewalls:
+		- stringent filtering capability
+		- two-way protection: compromised DMZ machines -> internal computers
+			+ compromised DMZ machines -> other machines in DMZ
+
+		- internal networks protect portions from each other
+
+virtualPrivateNetworks:
+	* in essence: uses encryption + authentication in lower protocol layers to
+		provide a secure connection 
+
+	* encryption happens at both ends of network, done by firewall, and have
+		to be the same type of encryption + authentication system
+	
+	* IPSec is common protocol mechanism at ip level (encryption+authentication)
+	* scenario:
+		- multiple dispersed LAN's operated by an overall og
+		- these communicate inside, via unprotected packets
+		- to communicate to WAN (internet, etc) these workstations send 
+			data through boundary firewall that incorporates ingress / 
+			egress traffic. 
+
+		- traffic going out, will be authenticated via IPSec
+		- Ingress traffic has to be authenticated with same IPSec + has 
+			some form of authentication
+
+		- singular workstations that connect to WAN should be secured + 
+			use IPSec but they are accessible from outside
+
+		- internal firewalls that encrypt/decrypt IPSec are not good, 
+			because functions like logging, access control and 
+			scanning are not capable to due workload im guessing?
+
+distributedFirewalls:
+	* cooperation of stand-alone + host-based firewall working toegether
+		under central admin control
+	* allows admin to set rules + configs across entire network
+	* protect vs internal attacks + protection tailored for specific machines
+		and applications
+	
+	* stand-alone provide global protection (external+internal)
+	* Can establish an internal + external DMZ
+	* external DMZ's contain less critical information + host-based firewalls
+	* important aspects:
+		- security monitoring: log aggregation + analysis, firewall stats, 
+			fine grained remote monitoring of hosts if needed
+
+summaryOfLocation+Topology:
+	* host-resident firewall:
+		- personal firewall software + software on servers
+		- can be used alone or in-depth deployment
+	
+	* screening router:
+		- router between internal + external with stateless / full packet
+			filtering		
+		
+		- SOHO applications
+	
+	* singel bastion inline:
+		- firewall between internal + external router
+		- stateful filter + application proxies
+		- small / medium sized orgs
+	
+	* single bastion T:
+		- bastion inline + third network interface to DMZ where external 
+			visible servers are.
+		
+		- medium sized orgs
+
+	* double bastion inline:
+		- DMZ sandwiched between bastion firewalls
+		- large orgs + government orgs
+
+	* double bastion T:
+		- DMZ on separate network interface on bastion firewall
+		- large + government orgs + required
+
+	* distributed firewall:
+		- stand-alone + host-based
+		- large business + government
+
+intrusionPreventionSystem:
+	* extension of IDS, capable of blocking detected malActivity
+	* host-based, network based, distributed/hybrid
+	* can use anomaly detection, signature/heuristic detection
+
+hostBased:
+	* signature/heuristic or anomaly detection 
+	* s/h:
+		- specific content of applicatio nnetwork traffic
+		- sequence of system calls
+		- looking for patterns identified as mal
+
+	* anomaly:
+		- behaviour patterns
+
+	* example of malActivity:
+		- modify system resources: rootkits, trojan horse and backdoors
+			changing libraries, directories, registry settings and 
+			user accounts
+
+		- privi escalation: attempting to gain / give root privi
+		- buffer overflow: look chapter 10
+		- access to email contact list: spreading of worms through contacts
+			in address list
+
+		- directory traversal: vulner in web server gaining access to
+			files outside the range
+
+	* sandbox approach:
+		- suited for mobile code: java applets, scripting languages
+		- HIDS isolates code in isolated environment and runs them to 
+			monitor it's behaviour, if malActivity is present then
+			prevents it from executing in normal system
+
+	* HIPS desktop protection:
+		- system calls: 
+			- applications require memory, asks kernal for access to 
+			memory.
+
+			- exploits will execute atleast 1 system call, so HIPS can
+			protect against that
+
+		- file system access:
+			- HIPS ensures system calls are not malicious + meets
+			the org. policy
+
+		- system registry:
+			- registry has persistent config info about programs
+			- used to extend lifespan of an exploit
+			- HIPS maintains registry config integrity
+
+		- host I/O:
+			- IO comms (local/network) can propogate exploit code
+			and mlware
+		
+			- HIPS forces proper client interation
+
+roleOfHIPS:
+	* due to growing attacks vs desktops+laptops systems the shift has grown
+	  to collection of tools on the os like, antivirus, antispyware, antispam,
+	  and firewalls
+
+	* HIPS aims to centralize these toosl int oa single-product suite of 
+	  functions
+
+	* meaning these tools could work better together, more cohesion, better
+	  threat prevention + easier management on the admin side
+
+	* approach is defense-in-depth strategy, use HIPS as an element + other 
+	  stuff like firewalls, or network-based IPS
+
+networkBasedIPS:
+	* in essence: an inline NIDS + authority to modify or discard packets and
+	  'tear down' tcp connections
+	
+	* signature/heuristic + anomaly detection
+	* common technique:
+		- flow data protection: reassembly of application payload, if a flow
+		  is determined to be malicious, then drop all packets of this flow
+
+	* idenfity malPackets:
+		- pattern matching: specific byte sequences (signature) stored in 
+		database of known attacks
+
+		- state matching: attack signature in context of stream instead of 
+		individual packets
+
+		- protocol anomaly: deviation from standards (in RFC)
+		- traffic anomaly: flooded udp, new service on network appearing
+		- statistical anomaly: baseline of normal traffic, alerts deviations
+
+dist/hybd/IPS:
+	* collection of data from large number of hosts, and relaying to central
+	analysis system to correlate, analyze data.
+
+	* if exploits are found, update database with this behaviour + signature to 
+	allow all IPS's to defend against it. "Digital Immune System"
+
+digitalImmuneSystem:
+	* motivation: increasing speed of propogation of malware by the internet
+	* IBM made, symantec maintained
+	* program emulation + malware detection system
+	* provide rapid response to new malware, stamp them out 
+	* when new malware is in system, detected, analyzed, stamped in database,
+	adds protection + shielding and becomes immune to it later
+
+	* example hybrid architecture: (goal: detect worms)
+		- deployed sensors at multiple networks + host locations
+		- sensors can be incorporated to ids
+		- sensor alerts + send copies of detected malware to central server
+		which analyzes this 
+
+		- server forwards info to protected environment, where sandboxing
+		and testing + analysis occurs
+	
+		- proper testing with similar environment occurs to identify vulner
+		- protected system develops patches and tests it
+		- if patch is good + does not impede target app, send it to all 
+		hosts 
+
+snortInline:
+	* modified version: snort inline, IDS + IPS
+	* newly added rules:
+		- drop: reject packet based on options defined in rule + log result
+		- reject: reject packet + log result. and, sends 'error' message:
+			- in tcp: it's a RST packet resetting the tcp connection
+			- udp is ICMP port unreachable msg to source 
+
+		- Sdrop: rejects packet but no logging occurs
+		- replace: allows snort user to modify the packet instead of 
+		dropping them. good for honeypot implementation
+		
+example: Unified Threat Management Products:
+	* reduce inline products (firewall, ids, ips, vpn) with 1 single device
+	that integrates a variety of approaches to deal with network-based attacks
+
+	* downside:
+		- insane performance drop
+		- latency + 'throughput' (?)
+		
+	* typical UTM appliance architecture:
+		- ingress traffic is decrypted (IPSec potent.) if needed
+		- firewall module filters traffic, discarding packets violating
+		rules
+	
+		- multiple modules process specific packets + flow of packets
+		at multiple protocol levels. data analysis engine is responsible for
+		keeping track of packet flow, coordination of IDS + IPS engines
+
+		- DAE reassembles packet paylods for content analysis by antivirus, 
+		and web filtering + antispam modules
+	
+		- some traffic needs to be reencrypted
+		- threats are all logged -> forensic analysis
+		- bandwidth shaping module uses QoS (quality of service) to optimize
+		the performance
+		

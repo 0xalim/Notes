@@ -1,0 +1,282 @@
+# Author: Ash+
+# Date created: Fri Mar 19 09:40:35 PM EDT 2021
+# Last Date Modified: Sat Mar 20 05:52:21 PM EDT 2021
+# File Name: database+cloudSec
+# Course: CPS 471
+# Instructor: Baldwin
+
+
+# This is chapter 5 of CompSec Principles && Practice (William Stallings)
+# Database + Cloud Security, prior to cryptography section; funneled.
+
+Objectives:
+	* what is a database, database management system + query language
+	* relational database + foreign/primary keys
+	* admin policies for RDBMS + inference attacks
+	* sql injection
+	* cascading auth.
+	* database encryption
+	* cloud service models + cloud computing reference architecture
+	* cloud-specific security threats
+
+whyDBSec:
+	* all stored info in db; concentrated system of info
+	* examples of info:
+		- corporate financial data
+		- phone records
+		- customer && employee data
+		- product information
+		- health care info
+
+lowDBSecReasons:
+	* complexity of dbms increasing; new features, services just means more
+	vulners and misuse
+
+	* langauge of db = sql; more complex than http. need to understand
+	sql security vulners to have it secure
+
+	* additional complexity due to mixture of db platforms, enterprise platforms
+	and os platforms
+
+	* new issue: cloud technology to host part or all of corporate db
+
+dbms:
+	* database: structured collection of data stored for use by >1 apps
+	* personnel file: contains information about employee/customer
+	* database is personnel file+other info (time of attendance,hours, weeks)
+	so that for example, you could calculate the salary for an employee
+
+	* dbms: suite of programs for constructing and maintaining a db + offers
+	'ad hoc' query facilities for users+apps
+
+	* query language: uniform interface to the db+user+app
+	* potentArchitecture:
+		- db definition lang (ddl): used by designers + admins to define
+		the db logical structure + procedural properties, represented by
+		a set of 'database description table'
+
+		- db manipulation lang (dml): provides tools for application devs
+		- query lang: designed to support end users
+		- dbms: uses db description table to manage physical db
+		- interface to physical db is through file man. + transaction man.
+		- dbms use auth tables (checking user auth. for access control)
+		- dbms uses concurrent access table (so simultaenous use is fine)
+
+	* os access control = read, write, exec; db needs more like select, insert,
+	update, or delete items. so os cannot be used for this.
+
+relationDB:
+	* table of data containing rows + columns (spreadsheet style)
+	* at least 1 unique column
+	* called a 'flat file' 
+	* drawback: some entries would be empty
+	* could link multiple databases with this unique identifier
+	* uses query lang that is declarative rather than procedural
+	* elements of relationalDB:
+		- relation: flat table
+		- rows: tuples
+		- columns: attributes
+		- primary key: unique identifier for this entry
+		- foreign key: this unique identifier but on a referenced table,
+		foreign key values can appear multiple times (one-to-many relation)
+	
+	* view: virtual database that is a result from filtering the db; can be 
+	used for sec reasons, only some columns/rows should be showed to user, etc
+
+sql:
+	* standardized lang to create, manipulate and query a relational db
+	* pg 162+163 shows some sql creating a query + a view
+
+sqlInjection:
+	* considered most dangerous network-based security threat
+	* sqlinjection exploits anture of web-app pages; via the dynamic components
+	like, having to insert information in a box (credit card, id info, etc)
+	
+	* a web page will make sql queries to databases to send/recieve info for
+	user experience; thus where attackers can exploit this aspect
+
+	* attack: send malicious sql commands to the db server, most common being
+	bulk extraction of data. can also exploit the table so, delete, modify, 
+	execute arbitrary code, dos attacks
+
+typicalSQLInjections:
+	* attack is viable when user input is incorrectly filtered for string 
+	escape characters embedded in sql statements, or user input is not strongly
+	typed - unexpected executions happen
+
+	* typical attack:
+		- vulner is found, attacker inputs sql commands to the database by
+		sending a command to the web server; which then will be accepted
+		by the firewall
+
+		- web server receives the malCode + sends to the web app server
+		- web app server gets the malCode + sends to db server
+		- db server executes the malCode -> info from database will
+		get returned
+
+		- web app server dynamically generates a page with the data, 
+		including credit card info for example, from the database
+
+		- web server sends that info to the attacker
+
+injectionTechniques:
+	* work by terminating a text string + appending a new command
+	* example:
+		- some input box located on a web page requiring input from user
+		- normal expected input is like this:
+
+	SELECT * FROM OrdersTable WHERE ShipCity = 'w/eCityHere'
+
+		- instead an attacker can close text, and append new commands:
+
+	SELECT * FROM OrdersTable WHERE ShipCity = 'w/eCityHere' ; DROP table 
+	OrdersTable--
+
+		- this command drops the entire table for 'w/eCityhere'
+
+sqliAttackAvenues+Types:
+	* Avenues
+		- user input: crafted inputs. user inputs come from http / get / 
+		post requests.
+
+		- server variables: collision of variables that contain http vars,
+		network protocol headers, environmental vars. web uses these for 
+		logging statistics + browsing trends. if these vars get logged
+		to a db without sanitization, its a sqli
+
+		- second-order injection: the input thats not sanitized, does not
+		come from the attacker but from the system itself via incomplete
+		prevention mechanisms
+
+		- physical user input: barcodes, rdif tags, or scanned paper forms
+		via optical character recog. that gets passed to a dbms
+
+	* inband attacks:
+		- tautology: ending text input and setting true commands; 1=1 AND
+		pwpd == ''. disabling password check, and since its tautology and 
+		conditional = always true then return all records in the db
+
+		- end-of-line comment: adding '--' so all commands after the 
+		attackers input is commented out, not executed
+
+		- piggyback queries: adding additional commands ontop of a legit
+		request, piggybacking the legit requests. relies on servers that use
+		bad config servers, allowing multiple queries on 1 string of code
+
+	* inferential attack: 
+		- illegal incorrect queries: overly descriptive default error page,
+		so attackers are able to perform recog/info gathering. but also, 
+		because an input failed, it's even more evidence to vulners/exploits
+
+		- blind sqli: attackers send true/false, if true page goes through
+		else error page, but doesn't have to show overly descriptive info, 
+		form of info gathering
+
+	* out-of-band attack:
+		- different way of server transporting this data, say an email
+		with the results of the query. result of outbound connectivity 
+		from the db server being lax
+
+sqliCounters:
+	* need multiple countermeasures due to large avenues + attack types
+	* defensive coding, detection, run-time prevention
+	* sqli attacks are good because devs have insecure coding practices,
+	so good coding (defensive coding) 
+	* defensive coding:
+		- manual defense code: correctig insufficient input validation,
+		type checking, contain no numbers, no special chars, perform
+		pattern matching (normal vs abnormal user inputed)
+
+		- parameterized query insertion: app dev needs to specify the 
+		structure of an sql query, and disallow unsanitized user input
+
+		- sql dom: automated data type validation + escaping. encapsulation
+		of the db. instead of string concatenation, use systematic one 
+		that uses type checking api (input filtering, rigorous type checking
+		of user input)
+
+	* detection:
+		- signature based: specific attack patterns, constant update + 
+		does not wokr against modified attacks
+
+		- anomaly based: norm behaviour vs patterns outside norm range. 
+		training phase, system learns range of normal behaviour 
+
+		- code analysis: teste suits that detect sqli vulners
+
+	* run-time prevention:
+		- check queries at runtime to see if they conform to standard model.
+		- automated tools are used here
+
+dbAccessControl:
+	* access control for specific portions of the database
+	* DAC / RBAC access control
+	* admin policies:
+		- centralized admin: small number of users able to grant / revoke
+		- ownership based auth: creator / owner can grant access
+		- decentralized admin: give copyable access control to other users
+
+	* types of access rights:
+		- create
+		- insert
+		- delete
+		- update
+		- read
+		- write
+
+	* access rights to:
+		- entire db
+		- ports of db
+		- individual tables
+		- selected rows / columns
+
+cascadingAuth:
+	* grand copyable access right to someone who grants those rights to another
+	if you revoke the rights of the first perston so A -> B -> C, if A revokes
+	grant from B then C also has their privi revoked. 
+
+	* Issue arrises when granting to person twice, if you remove rights from 
+	B when X granted him rights after A, when A removes the grant do you also
+	remove C's grant? This issue here arrises
+	
+	* general Solution: When A revoke rights, any cascaded right is revoked,
+	unless that access right would exist even if the grant from A had never
+	occured.
+
+RBAC:
+	* provides means of giving rights, while lessing admin burden + better sec
+	* in DAC:
+		- app owner: owns the database objects as part of an application.
+		- end user: operates on db objects via app, but doesn't own any 
+			of the db objects
+
+		- admin: user who has admin responsibility for part/all of db
+	
+	* RBAC db needs:
+		- create / delete roles
+		- define permission roles
+		- assign / cancel assignment of user to roles
+
+	* Microsoft SQL Server has 3 types of roles:
+		- server roles: fixed roles
+		- db roles: fixed roles
+		- user-define roles
+
+	* fixed server roles: define at server level + exist independant of any 
+	user db. eases admin task. goal: spread admin responsibility without 
+	giving out complete control. DB roles can give users admin tasks, with
+	only the rights they absolutely need
+
+	* fixed db roles: operates at level of individual db, some db's are
+	designed to help the DBA by easing admin burden. Others are designed to
+	provide blanket permissions for end user
+
+	* user-defined roles: created by users, then given access rights to some 
+	potions of db. Admin of this user-defined role can create new roles
+	and give those roles access rights. 2 types of user-define roles: standard
+	and application.
+		- standard: auth user can assign other users to the role. 
+		- app: associated with app rather than group of user + needs pass
+
+inference: 
+
