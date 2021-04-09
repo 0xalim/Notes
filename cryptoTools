@@ -1,0 +1,278 @@
+# Author: Ash+
+# Date created: Fri Apr  2 11:44:24 AM EDT 2021
+# Last Date Modified: Tue Apr  6 01:12:27 PM EDT 2021
+# File Name: cryptoTools
+# Course: CPS 471
+# Instructor: Baldwin
+
+
+# This is chapter 2 of CompSec Principles && Practice (William Stallings)
+# Cryptographic tools, this chapter is not being funneled due to time limit
+# and goal. Exams coming up in a months time.
+
+Objectives:
+	* operation of symmetric block encryption algorithms
+	* blockEnc vs. streamEnc
+	* secure hash functions for message auth.
+	* applications of secure hash functions
+	* asymmetric block encryption algorithms
+	* digital signature mechanism + digital envelopes
+		-> key management
+	* random + pseudorandom numbers in cryptography
+
+symmetricEncryption:
+	* AES / DES
+	* provides confidentiality 
+	* single-key encryption
+	* requirements:
+		- good algorithm
+		- both parties need secret key
+
+simplifiedModel:
+	* plaintext input (X)
+	* apply algorithm (e.g DES) using Y = [K, X]
+		- where K is key; X is data
+
+	* transmit and decret data using X = D[K, Y]
+
+attackingSymmetric:
+	* cryptanalytic:
+		- rely on: nature + knowledge/sample of data/key
+		- exploit algorithm to get data/key being used
+		- so if successful then encryption is not useful anymore
+
+	* bruteForce:
+		- try all keys until intelligible translation
+		- on average 1/2 of all keys to be succesful
+
+popularAlgorithm:
+	* DES:
+		- 64 bit input
+		- 64 bit output
+		- 56 bit key
+
+	* Triple DES:
+		- 64 bit input
+		- 64 bit output
+		- 112/168 bit key
+
+	* AES:
+		- 128 bit input
+		- 128 bit output
+		- 128/198/256 bit key
+
+dataEncryptionStandard:
+	* concerns:
+		- concern about algorithm
+		- low bit key
+
+tripleDES:
+	* repeat DES 3 times with 2/3 keys
+	* advantage:
+		- 168 bit key length
+		- encryption same as DES
+
+	* drawbacks:
+		- algorithm sluggish within software
+		- uses 64 bit block size
+
+advancedEncryptionStandard:
+	* rijndael is algorithm used
+	* the cunts over at nist needed new algorithm
+	* requirements:
+		- >=strength to 3DES
+		- better efficiency
+		- symmetric block
+		- 128 bit data + 128/192/256 bit keys
+
+	* issues:
+		- need more than 128 bit block
+		- electronic codebook (ECB):
+			- used to change multiple blocks of plaintext
+			- required to use same key
+			- regularities can be exploited using cryptanalysis
+
+ecb VS stream:
+	* ecb:
+		- input b-bit blocks
+		- apply encryption + use key K
+		- output is b-bit blocks 
+		- repeat
+		- things:
+			- one block at a time
+			- produce blocks
+			- can reuse keys
+
+* stream:
+		- input plaintext by stream M
+		- use key K to generate pseudorandom byte
+		- apply derived keys 'k' + encryption 
+		- run continuous
+		- things:
+			- process input continuously
+			- produce 1 element at a time
+			- faster + less code
+			- derived k is still secure
+
+messageAuthentication:
+	* protect vs active attacks
+	* verify authenticity:
+		- not altered contents
+		- authentic source
+		- correct sequence + time
+
+	* can use conventional encryption:
+		- both parties need key
+
+messageAuthenticationCode:
+	* mac algorithm using key K -> mac digest
+	* add to message
+	* receiver applies mac algorithm by key K -> mac digest
+	* compare new + appended 
+
+crytographicHashFunction:
+	* one way hash function
+	* input message + padding if needed
+	* output is hashed value (fixed length)
+
+authUsingHashFunction:
+	* symmetric encryption:
+		- message + hash function -> digest + (key+encryption) -> final
+		- append final to message itself
+		- can encrypt total message+final if needed
+		- for decryption:
+			- message+hash -> hash1
+	 		- final+(key+encryption) -> hash2
+			- compare hash1 & hash2 
+
+	* public key encryption:
+		- 1 party has privKey other has pubKey
+		- same as symmetric but encrypt using privKey 
+		- decrypt using pubKey
+
+	* using secret value:
+		- apply value to start+end to message
+		- one way hash total message -> hash digest
+		- append digest to message and send
+		- to decrypt:
+			- apply secret value to message and hash -> hash1
+			- compare digest to hash1
+
+hashRequirements:
+	- applied to any block size
+	- hash = fixed length
+	- easy to compute H(x)
+	- one way resistance: cant find x with H(x) = h (??)
+	- H(y) cannot be = to H(x)
+	- collision resistant
+
+securityOfHash:
+	* breaking hash functions:
+		- cryptanalysis: exploit logical weakness
+		- brute force: strength of hash depends on length produced
+
+	* SHA most used hash algorithm
+	* hash function applications:
+		- hashing passwords
+		- intrusion detection: compare stored hash vs new hash of files to
+		determine if it's been modified
+
+publicKeyEncryption:
+	* asymmetric:
+		- 1 privKey and pubKey (can be shared)
+		- need protocol for secure distribution
+		- based on math function (can encrypt/decypt with both keys)
+
+publicKeyEncryption:
+	* plaintext encrypted via algorithm+2party public key
+	* data can be decrypted only by 2party private key 
+	* example:
+		- bob encrypts via alice public key
+		- only ppl with alice private key can decrypt
+
+privateKeyEncryption:
+	* plaintext encrypted via algorithm+1party private key
+	* data can be decrypted only by 1party public key
+	* example:
+		- bob encrypts via his own private key
+		- only ppl with bobs public key can decrypt
+
+publicKeyRequirements: (crptosystems)
+	* can easily create key pairs
+	* best if either key can be used for each role
+	* infeasible for attacker to know msg without key
+	* infeasible to determine private key from public key
+	* easy for sender to encrypt
+	* easy for receiver to decrypt
+
+asymmetricEncryption:
+	* RSA: 
+		- block cipher
+		- plaintext + ciphertext is an integer between 0 and n-1 for some n
+		(??)
+
+	* diffie-Hellman:
+		- agreement about shared secret (for secret key)
+		- for later symmetric encryption
+		- limited to the exchange of keys
+
+	* digital signature standard (DSS):
+		- digital signature function with sha-1
+		- cannot be used for encryption / key exchange
+
+	* elliptic
+		- like rsa but smaller keys
+
+digitalSignatures:
+	* used to authenticate source + data integrity
+	* created by encrypting hash code with private key
+	* does not provide confidentiality:
+		- basically says 'x' has signed+produced the msg
+		- message is safe from alteration not eavesdrop
+
+publicKeyCertificate:
+	* unsigned certificate: (hashed)
+		- bob's id info
+		- bob's public key
+		- certificate authority information
+
+	* encrypt hash with CA private key to get signature
+	* append unsigned+signature -> signed certificate
+	* to decrypt:
+		- hash unsigned part
+		- decrypt signed part with CA public key
+		- compare hash values
+
+digitalEnvelopes:
+	* encrypt mgs with 'truly' random symmetric key
+	* encrypt symmetric key with 2party public key
+	* to decrypt:
+		- decrypt key with 2party private key
+		- use decrypted key to decrypt msg
+
+randomNumbers:
+	* used to generate:
+		- keys for public key algorithms
+		- stream key for stream cipher
+		- symmetric key for digital envelopes / temporary session key
+		- handshaking to prevent replay attacks
+		- session key
+
+randomKeyRequirements:
+	* randomness:
+		- uniform distribution: frequency should be same for all numbers
+		- independence: no value can be inferred from others
+
+	* unpredictability:
+		- each number statistically independant
+		- no patterns
+
+pseudoRandom:
+	* algorithms are deterministic, so cannot produce random numbers
+	* psuedorandom numbers are:
+		- sequences that satisfy statistical randomness
+		- likely to be predictable
+
+	* true random number gens:
+		- need nondeterministic source
+		- things like: radiation, gas discharge, etc
