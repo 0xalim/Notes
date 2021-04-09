@@ -1,6 +1,6 @@
 # Author: Ash+
 # Date created: Fri Mar 19 09:40:35 PM EDT 2021
-# Last Date Modified: Sat Mar 20 05:52:21 PM EDT 2021
+# Last Date Modified: Fri Apr  2 11:43:25 AM EDT 2021
 # File Name: database+cloudSec
 # Course: CPS 471
 # Instructor: Baldwin
@@ -16,8 +16,6 @@ Objectives:
 	* sql injection
 	* cascading auth.
 	* database encryption
-	* cloud service models + cloud computing reference architecture
-	* cloud-specific security threats
 
 whyDBSec:
 	* all stored info in db; concentrated system of info
@@ -89,7 +87,7 @@ sql:
 
 sqlInjection:
 	* considered most dangerous network-based security threat
-	* sqlinjection exploits anture of web-app pages; via the dynamic components
+	* sqlinjection exploits nature of web-app pages; via the dynamic components
 	like, having to insert information in a box (credit card, id info, etc)
 	
 	* a web page will make sql queries to databases to send/recieve info for
@@ -165,7 +163,7 @@ sqliAttackAvenues+Types:
 
 	* inferential attack: 
 		- illegal incorrect queries: overly descriptive default error page,
-		so attackers are able to perform recog/info gathering. but also, 
+		so attackers are able to perform recon/info gathering. but also, 
 		because an input failed, it's even more evidence to vulners/exploits
 
 		- blind sqli: attackers send true/false, if true page goes through
@@ -197,7 +195,7 @@ sqliCounters:
 
 	* detection:
 		- signature based: specific attack patterns, constant update + 
-		does not wokr against modified attacks
+		does not work against modified attacks
 
 		- anomaly based: norm behaviour vs patterns outside norm range. 
 		training phase, system learns range of normal behaviour 
@@ -280,3 +278,46 @@ RBAC:
 
 inference: 
 
+	* deducing unauthorized information from legit response
+	* use of nonsensitive data + metadata (don't need them) to infer data of
+	higher sensitivity 
+
+	* metadata: dependencies among data items used to deduce info
+	* inference channel: transfer path of unauth. data
+	* inference techniques:
+		- analyzing functional dependencies between attributes
+		 in/across table (??)
+		- merging views with the same constraints
+
+	* dealing with disclosure by inference:
+		- detection during database design: removal of inference channel by
+		altering database structure / changing access control. E.g splitting
+		table into multiple smaller tables + more granular RBAC SCHEME
+			- weakness: stricter access control -> reduce availability
+
+		- detection at query time: eliminate inference channel during query,
+		if detected then alter or deny 
+	
+		
+dbEncryption:
+	* security Levels: (applied at multiple levels of granularity)
+		- firewalls, authentication, access control, DB access control
+		- encryption
+
+	* disadvantages:
+		- key management: decryption key
+		- record searching is harder due to encrypted data
+
+	* scheme:
+		- dataOwner: org that produces the data
+		- user: guy doing query
+		- client: frontend transforming userQuery -> queryEncryptedData	
+		- server: receive encrypted data + allow for distribution
+
+	* order:
+		- original query -> queryProcessor
+		- queryProc -> dataDecrypter/Encrypter (with help of metadata)
+		- done decryption -> query executor (access encrypted data)
+		- (??) -> encrypted data is sent back + presented to user
+
+ 
