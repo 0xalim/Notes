@@ -1,0 +1,172 @@
+# Author: Ash+
+# Date created: Sat Apr 10 10:08:53 AM EDT 2021
+# Last Date Modified: Sat Apr 10 07:26:03 PM EDT 2021
+# File Name: pubKeyCrypto 
+# Course: CPS 471
+# Instructor: Baldwin
+
+
+# This is chapter 21 of CompSec Principles && Practice (William Stallings)
+# Public Key Cryptography, this chapter is not being funneled due to time limit
+#  and goal. Exams coming up in a months time.
+
+Objectives:
+	* Understand SH-1/2
+	* Overview of HMAC for message authentication
+	* RSA Algorithm
+	* Diffie-Hellman algorithm
+
+bitwiseXOR:
+	* "simple hash function" 
+	* XOR multiple blocks 
+	* Can do many things like:
+		- rotate after each XOR
+		- use CBC after hashing + appending to message
+
+	* Seen as a fundamental principle, XOR'ing is.
+
+secureHashAlgorithm:
+	* dev'd by nist; published as fips 180
+	* revised -> SHA-1; produces 160 bit hash
+	* revised again -> SHA-2; SHA-256/384/512 produces 256/348/512 bit hash
+
+digestGeneration:
+	* Append padding bits:
+		- 1 followed by 0's so that length is congruent to 896 modulo 1024 
+		- append block of 128-bits (unsigned) contains length before padding
+		- outcome: integer multiple of 1024 in length. Broken up by M1, M2
+		.. Mn that are 1024 in length so that total length = N x 1024
+
+	* Init hash buffer:
+		- 512-bit buffer holding hash function as it's being completed
+		- buffer = 8 64-bit registers {a,b,c,d,e,f,g,h}
+		- book has hex values stored in these registers (big endian format)
+		- obtained by taking 64 bits of fractional part of square root of
+		the first 8 prime numbers 
+
+	* Process message in 1024-bit blocks (??) 
+
+SHA-3:
+	* SHA-2 same structure + math operations as SHA-1 so it caused concern as
+	it could be vulnerable; cunts over at NIST wanted new SHA-3 so.
+
+	* SHA-3 requirements:
+		- supports hash length of 224, 256, 384, 512
+		- algorithm can process small blocks at a time instead of requiring
+		large amounts to be buffered in memory
+
+hashBasedMsgAuthCode:
+	* interest:
+		- crypto hash functions faster than encryption
+		- library code widely used(??)
+		- SHA-1 could not do this
+
+	* application: (ip security)
+		- transport layer security (TLS)
+		- secure electronic transaction (SET)
+	
+	* design objectives:
+		- use available hash functions
+		- no degredation in performance
+		- can replace hash function if better one is found later
+		- use/handle keys in simple way
+		- well-understood crytoanalysis of strength of authentication 
+
+	* structure:
+		- message M is b-bits
+		- Key k is padded to that klength = blength (left padding)	
+		- ipad = 00110110 repeated b/8 times 
+		- XOR K+ipad = Si; Append Si+M = M
+		- Hash using IV (m-length); H(Si||M)
+		- opad = 01011100 repeated b/8 times
+		- XOR K(padded)+opad -> So+M
+		- Hash using IV (m-length); HMAC(K, M)
+
+
+HMACSecurity:
+	* security depends on hash algorithm used
+	* attack on embedded hash function:
+		- attacker using random IV to compute (brute force), or birthday
+		attack. Brute force = O(2^n)
+
+		- attacker finds collision in hash function:
+			- from 2 hashes that match
+			- birthday attack O(2^n/2)
+
+RSAEncryption:
+	* cipher = M^e mod n (n = prime number)
+	* Decrypt M = C^d mod n = (M^e)^d mod n = M (??)
+	* 2parties know n + e
+	* only receiver knows d
+	* pubKey = {e,n}
+	* privKey = {d,b}
+
+algorithm:
+	* Keygen:
+		- select p & q where both prime, but p!=q
+		- calculate n = p*q
+		- phi(n) = (p-1)(q-1)
+		- select e:
+			- gcd(phi(n),e)=1 (??); 1<e<phi(n)
+		
+		- calculate d = d*e mod phi(n) = 1
+		- pubKey = {e,n}
+		- priKey = {d,n}
+
+	* encryption:
+		- plaintext = M<n
+		- ciphertext = M^e mod n	
+
+	* decryption:
+		- ciphertext = c
+		- plaintext = C^d mod n
+
+securityOfRSA:
+	* bruteforce: need to try all private keys
+	* math attacks: factoring product of 2 primes (hard)
+	* timing attacks: depend on running time of decryption algorithm
+	* exploiting RSA algorithm
+
+diffieHellman: (key exchange)
+	* method of exchanging secret key to be used for encrypting messages
+	* security relies on difficulty of computing discrete logarithms  
+
+exchangeAlgorithm:
+	* global elements:
+		- prime number q
+		- alpha; where alpha<q + primitive root
+
+	* 1party key Gen:
+		- private Xa; Xa < q
+		- calculate public Ya; Ya = alpha^Xa mod q
+
+	* 2party key gen:
+		- private Xb; Xb < q
+		- calculate public Yb = alpha^Xb mod q
+
+	* 1party secret key gen:
+		- K = Yb^Xa mod q
+
+	* 2paryt secret key gen:
+		- K = Ya^Xb mod q
+
+	* looking at secret key gen, public key is exchanged while K is calculated
+
+MITM:
+	* essentially instead of alice+bob using their own communication channel
+	the attacker creates 2 sets of public/private keys and communicates to both
+	alice and bob. While A+B think they're communicating with each other, my guy
+	darth vader is the one at the end of the communication channel!
+
+otherPubKeyAlgorithms:
+	* Digital Signature Standard (DSS):
+		- sha-1
+		- can't be used for encryption/key exchange
+		- used for digital certificate
+
+	* elliptic curve:
+		- security = RSA but smaller bit size
+		- confidence not as high as RSA
+		- based on math construct called elliptic curve
+
+
