@@ -1,0 +1,272 @@
+# Author: Ash+
+# Date created: Fri Apr  9 08:06:14 PM EDT 2021
+# Last Date Modified: Sat Apr 10 07:03:58 AM EDT 2021
+# File Name: SymmetricEncr+MsgConf
+# Course: CPS 471
+# Instructor: Baldwin
+
+
+# This is chapter 20 of CompSec Principles && Practice (William Stallings)
+# Symmetric Encryption + Message Confidentiality, this chapter is not being
+# funneled due to time limit and goal. Exams coming up in a months time.
+
+Objectives:
+	* Basic principles of symmetric encryption
+	* Significance of Feistel Cipher structure
+	* Structure + function of DES
+	* 2key vs 3key DES
+	* Structure + function of AES
+	* Stream encryption vs block cipher encryption
+	* Major block cipher modes of operation
+	* Issues with distributing keys
+
+symmetricEncryption:
+	* secret-key / single-key encryption
+	* most used alternative
+	* 'ingredients':
+		- plaintext
+		- encryption algorithm
+		- secret key
+		- cipher text
+		- decryption algorithm
+cryptographyDimensions:
+	* operations:
+		- substitution: swap 'x' for 'y'
+		- transposition: rearrange elements
+
+	* number of keys:
+		- symmetric: 1/2party same key
+		- asymmetric: 1/2party different key
+
+	* processing:
+		- block cipher: 1 block per time
+		- stream: elements continuously
+
+attacks:
+	* ciphertext only: 
+		- attacker knows algorithm 
+		- ciphertext to decode
+
+	* known plaintext: 
+		- attacker knows algorithm 
+		- ciphertext to decode
+		- 1+ plaintext-ciphertext pair formed with secret key
+
+	* chosen plaintext:
+		- attacker knows algorithm
+		- ciphertext to decode
+		- plaintext + corresponding ciphertext generated with secret key
+
+	* chosen ciphertext: 
+		- knows algorithm
+		- ciphertext
+		- ??
+
+	* chosen text:
+		- know algorithm
+		- cipher text
+		- ??
+		- ??
+
+secureEncryptionSchemes:
+	* secure if:
+		- cost breaking cipher exceeds information
+		- time required to break cipher exceeds lifetime of information
+
+	* can estimate time/cost of brute-force, hard to estimate effort to break
+
+classicalFeistelNetwork:
+	* input plaintext 
+		(1011 0101)
+
+	* split plaintext into Left + Right sections 
+		(1011 | 0101)
+	
+	* Right+Key -> round function 'F' (XOR)
+		 (0101+1010)
+	
+	* Perform XOR function of Right
+		 (0101+1010 -XOR-> 1111)
+	
+	* Right section still gets pushed for transposition
+	* Perform XOR function of Rounded Function+Left 
+		(1111+1011 -XOR-> 0100)
+
+	* Transpose XOR'd + Right
+	* Repeat many times
+	* Transpose 1 last time
+
+blockCipherStructure:
+	* sequence of rounds
+	* operations = substitutions + transposition
+	* design features:
+		- block size
+		- key size
+		- number of rounds
+		- subkey generation algorithm
+		- round function
+		- fast encryption/decryption
+		- ease of analysis
+
+3DES:
+	* encryption:
+		- encrypt plaintext via 1key
+		- decrypt ciphertext via 2key (wrong key so its still cipher)
+		- encrypt ciphertext via 3key
+
+	* decryption:
+		- decrypt ciphertext via 3key
+		- encrypt ciphertext via 2key
+		- decrypt ciphertext via 1key
+
+AES:
+	* general overview of method:
+		- plaintext
+		- XOR via key (key generates multiple derived keys)
+		- subbytes
+		- shift row
+		- mix columns
+		- XOR via key	
+
+	* indepth:
+		- input state
+		- take column by column of state and lay it horizontally
+		- input each 8 bit hex value into subByte
+		- take subbyte output and put it into shiftRow
+		- some values get shifted others dont 
+		- 1 column fed into mixedColumns and repeat
+		- XOR output from mixedColumns + derivedKey
+		- 1 Round done (AES ~10 rounds)  
+
+	* SubByte:
+		- matrix/table of Hex values to use as substitute value
+		- decrypt has inverse-sBox
+
+shiftRow: (??)
+	* moves individual bytes from one column to another + spread bytes over column
+	* left rotate each row by 0,1,2,3 bytes
+	* decryption does reverse
+
+mixColumns:
+	* mixColumns:	
+		- operate on each column individually
+		- (math) maps each byte to a new value that is a function of
+		 all four bytes
+	
+		- use of equations over finite fields
+
+	* Add round key:
+		- XOR with derived keys
+		- security from complexity of round key expansion
+
+streamCiphers:
+	* processes elements continuously
+	* key as input to pseudorandom bit generator
+	* XOR keystream + plaintext
+
+rivestCipher4(streamCipher):
+	* Init S + T:	
+		- array 1 'S' length 256 numbered from 0-255
+		- array 2 'K' key of any length
+		- array 3 'T' loop K till length of 256	
+
+	* Permutation of S:
+		- swap of S[i] and S[j]
+		- where i = 0...255
+		- J = 0; j = (j + S[i] + T[i] mod 256)
+
+	* Stream generation:
+		- J = 0; J = (J + S[i] mod 256)
+		- i = 0...255
+		- Swap S[i] and S[j]; so keep permuation of S going
+		- Select 'K' using K = t = (S[i] + S[j] mod 256)
+		- Now XOR K+plaintext = ciphertext
+
+blockCipherModes:
+	* electronic codebook (ecb):
+		- block of 64 plaintext is encoded using same key
+	
+	* cipher block chaining (cbc):
+		- input is next 64-bit plain + preceding 64-bit cipher XOR'd
+		- application: authentication
+
+	* cipher feedback (cfb):
+		- input processed s-bits at a time
+		- pseudorandom output from preceding cipher to encryption algorithm
+		- XOR pseudorandom + plaintext -> ciphertext
+		- application: authentication 
+
+	* output feedback (ofb):
+		- same as cfb but input to encryption algorithm is preceding DES out 
+		- stream transmission over noisy channel (satellite)
+
+	* counter (ctr):
+		- block of plain+counter XOR'd; counter++
+		- application: high-speed requirement
+
+ecb:
+	* processed b-bits at a time
+	* encrypted using same key
+	* drawback:
+		- vulnerable due to repeated encryption
+	
+cbc:
+	* initially: IV-vector XOR'd with plaintext; apply encryption+key -> C1
+	* C1+Plain2 XOR'd; apply encryption+key -> C2:
+		- even if P1 and P2 are same, C1 and C2 are different due to different
+		values output when XOR'd
+
+		- better than ecb in that sense
+
+	* decryption is in reverse supplying IV firstly to get P1
+
+cfb:
+	* initially: IV-vector = s-bits + (b-s)-bits
+	* encrypt total 64 bit
+	* Select s-bits where length = length of P1
+	* XOR s-bits + P1 -> C1
+	* Use C1 as s-bits for next round
+	* decryption:
+		- use IV-vector same as above
+		- encrypt + select s-bits same as above
+		- XOR s-bits + C1 -> P1
+		- use C1 as input s-bits for next round
+
+	* encrypt/decrypt function mathematically the same, same algorithm
+
+ctr:
+	* E[CTR,K] -> XOR E+P1 -> C1
+	* E[CTR+1,K] -> XOR E+P2 -> C2
+	* increment counter+1
+	* Decryption is same but use C1 as XOR with E -> P1
+
+encryptionAcrossNetworks:
+	* End-to-end encryption:
+		- encrypt at host + server
+		- decrypt at host + server
+
+	* link encryption:
+		- encrypt + decrypt as it passes to nodes
+		- have to rely on machines to encrypt / decrypt
+		- potential that they do not do so, so you use end-to-end
+
+	* Can use both at the same time
+
+keyDistribution:
+	* delivering key to 2parties that want to exchange info without eavesdroppers
+	* acheived by:
+		- physical delivery
+		- 3rd party to deliver keys to 2parties
+		- if key is already being used, and a new key is wanted then encrypt
+		the new key with the old one
+
+		- if 2parties have encrypted connection to C, C could deliver to both
+
+autoKeyDistribution: (1key)
+	* 1party requests connection
+	* request sent from security service -> key distribution center (auth. can
+	be required)
+
+	* key sent from KDC to 1party + 2party (same key)
+	* can transmit data now
+	
