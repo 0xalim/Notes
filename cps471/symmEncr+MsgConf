@@ -42,7 +42,7 @@ cryptographyDimensions:
 		- block cipher: 1 block per time
 		- stream: elements continuously
 
-attacks:
+??attacks:
 	* ciphertext only: 
 		- attacker knows algorithm 
 		- ciphertext to decode

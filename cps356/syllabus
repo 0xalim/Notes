@@ -1,0 +1,60 @@
+/*******************************************************************************
+/
+/      filename:  syllabus
+/
+/   description:  Syllabus for C356
+/
+/        author:  ash
+/	 book: ~/Documents/books/operatingSystems.pdf
+/
+/         class:  CPS 356
+/    instructor:  Ju Shen
+/    source instructor: Saverio Perugini
+/
+/      assigned:  June 23
+/           due:  6~ weeks (tba)
+/
+/******************************************************************************/
+
+1 - Linux + C programming
+	* [x] Intro to operating systems
+	* [x] Unix philosophy
+	* [x] file + directories
+	* [x] C-system libs + I/O
+	* [x] Compiling C: (debugging+gdb+valgrind)
+
+2 - Processes + threads
+	* [x] What is a process (id + pid + intro to fork + terminating process)
+	* [x] Memory alloc / dealloc
+	* Cron jobs
+	* Storage + linkage in C
+	* [x] thread + thread functions
+	* [x] procManipulation (wait, exec, building argument vector)
+	* Learn linux shell + environment variables
+	* [x] Low level I/O
+
+3 - Scheduling
+	* [x] Types + criteria + algorithms
+	* [x] Multi-level queues + feedback queues
+
+4 - Concurrency + Synchronization
+	* Mutual exclusion + critical section problem
+	* Synchro problems
+	* Coroutines in lua
+	* Intro to Go (example, tour, cmd programming)
+
+5 - Deadlock
+	* Deadlock prevention + avoidance (bankers algo)
+	* Deadlock detection + recovery
+
+6 - Memoery management
+	* [x] Fundamentals
+	* Contigous allocation
+	* Paging
+	* [x] Segmentation + segFaults + buffer overflow
+
+7 - Virtual Memory
+	* Demand paging
+	* Page replacement algorithm
+	* Allocation
+	* Course reflection(./terms)

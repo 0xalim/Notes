@@ -1,0 +1,63 @@
+/** Virtualization **/
+Crux: how does os do what it does + efficiency? + hardware support? + virt.
+
+Os: make sure os is running corrently + easy-to-use + efficiently
+	* virtualization: physical resource -> general + virtual form
+	* API: system call to run, access memory+devices
+	* resource management: run multiple instances of program
+
+Virt Cpu: make it seem a single+core cpu has infinite number of cpu's by
+	  allowing programs to run simultaenously
+
+./code/cpu.c
+
+Virt memory: Running multiple instances of a process on the same address space
+	     making it seem like the os is allocating private memory instead
+	     of sharing physical memory per process.
+
+./code/mem.c
+
+/** Concurrency **/
+Concurrency crux: If there are multiple processes executing threads within same
+		  address space, how to build a correctly working program?
+
+./code/threads.c
+
+details:
+	- multiple executing threads in same address space, in the code above we 
+	  run 2 threads incremeting loop. If value is set high then sometimes the 
+	  value we get is not what we expect, and also different values as well.
+
+example: 2 threads increment 1 each loop.
+
+prompt> ./thread 1000000
+Initial Value : 0
+Final value: 143012
+Expected : 2N = 2000000
+
+/** Persistence **/
+Persistence crux: How does the os store data persistently, and manage it. What sort
+		  of algorithms are needed + policies for good performance. What
+		  happens if there is hardware/software faiilure.
+
+./code/io.c
+
+details: device drivers; write protocol for system crashes; os as standard library
+
+/** Overview **/
+Os tasks:
+	* virt
+	* concurrency
+	* persistance
+
+how: via abstractions making it easier to understand pieces of the os
+
+goal:
+	* performance -> meaning minimum overhead (more instructions, extra space)
+	* protection: isolation of processes to not harm other process+|os itself
+	* reliability: fallback to crashes of system
+	* others:
+		- energy-efficiency
+		- security
+		- mobility (different devices)
+fin

@@ -99,7 +99,7 @@ RSAEncryption:
 	* 2parties know n + e
 	* only receiver knows d
 	* pubKey = {e,n}
-	* privKey = {d,b}
+	* privKey = {d,n}
 
 algorithm:
 	* Keygen:

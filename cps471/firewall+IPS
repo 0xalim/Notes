@@ -1,6 +1,6 @@
 # Author: Ash+
 # Date created: Wed Mar 17 10:01:36 PM EDT 2021
-# Last Date Modified: Fri Mar 19 09:36:50 PM EDT 2021
+# Last Date Modified: Fri Mar 26 10:52:43 AM EDT 2021
 # File Name: firewall+IPS
 # Course: CPS 471
 # Instructor: Baldwin
@@ -64,7 +64,7 @@ typesOfFirewalls:
 	* passive filter: if it meets criteria, it goes in
 	* negative filter: reject packets that meet criteria
 	* packet filtering firewall
-	* stateful inspection firewall: (state info db?)
+	* stateful inspection firewall: keeps info about state of connection
 	* application proxy firewall (comm between 2 application layers)
 	* circuit-level proxy firewall (comm of 2 transport layers)
 

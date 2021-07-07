@@ -181,7 +181,7 @@ sqliCounters:
 	* sqli attacks are good because devs have insecure coding practices,
 	so good coding (defensive coding) 
 	* defensive coding:
-		- manual defense code: correctig insufficient input validation,
+		- manual defense code: correcting insufficient input validation,
 		type checking, contain no numbers, no special chars, perform
 		pattern matching (normal vs abnormal user inputed)
 

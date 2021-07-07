@@ -1,6 +1,6 @@
 # Author: Ash+
 # Date created: Tue Mar 16 12:50:09 AM EDT 2021
-# Last Date Modified: Wed Mar 17 09:57:12 PM EDT 2021
+# Last Date Modified: Wed Mar 24 11:01:36 AM EDT 2021
 # File Name: intDetect
 # Course: CPS 471
 # Instructor: Baldwin
@@ -397,6 +397,9 @@ intrusionDetectionTechniques:
 			and the use of ports that normally would not be.
 
 statefulProtocolAnalysis: (SPA)
+	* looking at connection at a higher level (entire convo) instead of a 
+	packet by packet convo
+
 	* comparison of real time network traffic with universal vendor profiles
 	* used for benign protocol traffic
 	* drawback: high resource cost
