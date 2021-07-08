@@ -38,23 +38,23 @@
 	* [x] Multi-level queues + feedback queues
 
 4 - Concurrency + Synchronization
-	* Mutual exclusion + critical section problem
-	* Synchro problems
-	* Coroutines in lua
-	* Intro to Go (example, tour, cmd programming)
+	* [] Mutual exclusion + critical section problem
+	* [] Synchro problems
+	* [] Coroutines in lua
+	* [] Intro to Go (example, tour, cmd programming)
 
 5 - Deadlock
-	* Deadlock prevention + avoidance (bankers algo)
-	* Deadlock detection + recovery
+	* [] Deadlock prevention + avoidance (bankers algo)
+	* [] Deadlock detection + recovery
 
 6 - Memoery management
 	* [x] Fundamentals
-	* Contigous allocation
-	* Paging
-	* [x] Segmentation + segFaults + buffer overflow
+	* [x] Contigous allocation
+	* [] Paging
+	* [] Segmentation + segFaults + buffer overflow
 
 7 - Virtual Memory
-	* Demand paging
-	* Page replacement algorithm
-	* Allocation
-	* Course reflection(./terms)
+	* [] Demand paging
+	* [] Page replacement algorithm
+	* [] Allocation
+	* [] Course reflection(./terms)
