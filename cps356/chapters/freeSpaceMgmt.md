@@ -103,5 +103,19 @@ to manage the space as a free-list:
 	head_>next = NULL;
 	```
 
+when a request for 100b is sent:
+1. library finds first chunk large enough for request
+1. split chunk in 2 (1 chunk for request, and free-space chunk)
+1. allocates requested space + header for easier free()
+1. returns pointer start of allocated space
+1. shrinks remaining free space
 
-	
+upon calling free():
+1. application returns allocated memory by free(x) (x is pointer)
+1. library finds size of freed region; adds it to free-space list
+1. change *magic* in header to *next* pointing to next free-space
+1. result is fragmented free space
+1. start coalescing by going through list + merging close nodes
+
+### Growing heap
+ 
