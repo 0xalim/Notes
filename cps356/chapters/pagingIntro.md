@@ -57,3 +57,43 @@ to be answered:
 1. is paging too slow?
 
 ## Where are Page Tables Stored?
+assuming easy linear array for simplicity now; os indexes by *vpn* and looks 
+up the page-table entry *pte* at that index to find the *pfn*.
+
+contents of pte:
+1. valid bit: whether the translation is valid. if the process tries to access
+space between the stack+heap (which will be marked invalid) os will terminate
+ 1. this valid/invalid idea is to save space on physical frames by not needing
+  to allocate anything
+1. protection bits: indicates whether rwx is possible; generates trap
+1. present bit: indication to whether the data is in swap
+ 1. swap: space on disk for moving data from memory to here if not used
+1. dirty bit: indicates whether changes have been made since
+1. reference bit: indicates whether page has been accessed (determines popular
+ pages). good for page replacement (later topic)
+
+## Paging is Too Slow:
+instruction:
+
+	```
+	movl 21, %eax
+	```
+
+1. first translate vaddress (21) to correct physical address (117)
+1. fetch pte from process page table, perform translation;
+1. load data from physical memory
+
+to complete the above, hardware needs page table location for process. thus 
+our assumption: 1 page-table base register contains pAddress of page table.
+need to know location of pte now:
+
+	```C
+	vpn	= (virtualaddress & vpn_mask) >> shift;
+	pteaddr = pagetablebaseregister + (vpn * sizeof(pte));
+	```
+
+1. if vpn_mask set to 0x30 (110000) and shift is set to 4 (bits in offset)
+ move vpn bits down to form correct vpn.
+ 1. 21 *010101* + masking -> *010000*; shift turns it into 01, page 1.
+1. use value as index in array of pte's shown via page table base register.
+ 
