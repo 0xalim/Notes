@@ -55,3 +55,5 @@ instruction:
 to be answered:
 1. contents of page tables + their size?
 1. is paging too slow?
+
+## Where are Page Tables Stored?
