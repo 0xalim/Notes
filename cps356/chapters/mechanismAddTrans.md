@@ -63,11 +63,11 @@ physical address = 0 + 32 = 32 (physical address)
 1. base+bound: support address translation
 1. translate virtMem -> Phys mem + check if OOB
 1. privi instructions to update base+bound (before process runs)
-1. privi instruction for exception handling: illegal address acces
+1. privi instruction for exception handling: illegal address access
 1. ability to raise exceptions. (location of handler = priviOperation)
 
 # Operating system issues: {via example 15.2}
-1. os 1st slot; 2 slot empty; 3 slot processd; 4 slot empty; free list
+1. os 1st slot; 2 slot empty; 3 slot process; 4 slot empty; free list
 1. os does work if process is terminated/killed (free data structure) +  
  put memory back on free list
 1. 1 base+bounds and it may differ per process so save+restore values  
