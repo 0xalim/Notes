@@ -92,8 +92,25 @@ need to know location of pte now:
 	pteaddr = pagetablebaseregister + (vpn * sizeof(pte));
 	```
 
-1. if vpn_mask set to 0x30 (110000) and shift is set to 4 (bits in offset)
+1. if *vpn_mask* set to 0x30 (110000) and shift is set to 4 (bits in offset)
  move vpn bits down to form correct vpn.
  1. 21 *010101* + masking -> *010000*; shift turns it into 01, page 1.
 1. use value as index in array of pte's shown via page table base register.
- 
+1. hardware fetches pte from memory and extracts the pfn
+1. add pfn+offset
+
+in other words; pfn left shifted by *shift*. then or'd with offset.
+
+	```C
+	offset   = virtualaddress * offset_mask
+	physaddr = (pnf << shift) | offset
+	``` 
+
+this whole protocol performs an extra memory reference in order to fetch
+the translation from the page table. slows down process by factor 2+
+
+issues present due to this protocol:
+1. system runs too slow
+1. takes up too much memory
+
+fin
