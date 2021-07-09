@@ -46,3 +46,12 @@ instruction:
 1. in physical frame number 01(1) == 111(7)
 1. thus final translation in physical address index(7, 5)
 
+	```
+	1  1  1  0  1  0  1
+	-------  ----------
+	 PFN	  OFFSET
+	```
+
+to be answered:
+1. contents of page tables + their size?
+1. is paging too slow?
