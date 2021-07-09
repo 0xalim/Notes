@@ -118,4 +118,43 @@ upon calling free():
 1. start coalescing by going through list + merging close nodes
 
 ### Growing heap
- 
+* the heap may just run out of space; the easiest approach to this is just to
+fail honorably. returning a null as needed.
+
+* unix systems request more heap memory using sbrk() (not typically used in code)
+and allocate more chunks from there.
+
+* the os finds free physical pages, maps
+onto address space of requesting process and returns pointer of end of new heap
+
+### Basic strategies
+
+best fit:
+1. search through free-list
+1. find chunks that are as big/bigger than requested
+1. choose smallest candidate 
+1. pro: only need 1 free-space list pass to determine location
+1. con: bad implementation pay heavy performance penalty
+
+worst fit:
+1. search through free-list
+1. find largest chunk and return requested amount; keeping largest on free-list
+1. pro: only need 1 free-space list pass to determine location
+1. pro: performs badly + excess fragmentation + high overhead
+
+first fit:
+1. search through free-list
+1. first block that is big enough is chosen
+1. pro: speed , no exhuastive searching
+1. con:
+ 1. pollutes beginning of free space with small objects
+ 1. how allocator manages free list becomes an issue.
+1. fix: address-based ordering
+ 1. keep list ordered by free-space; coalescing becomes easier + fragments less
+
+next fit:
+1. extra pointer to first fit that keeps last pointer position
+1. idea is to prevent picking off the beginning of the free-list
+1. pro: speed is kept due to no exhuastive searching
+
+fin
