@@ -1,7 +1,7 @@
 ## Cloud-Based Intell. Application Development CPS449
 
 ### Course Info.
-instructor: Dr. Phu Phung [link](http://academic.udayton.edu/PhuPhung/)
+instructor:[Dr. Phu Phung](http://academic.udayton.edu/PhuPhung/)
 Prereq: CPS 350
 Teaching Assistant: By Appointment
 
