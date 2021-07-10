@@ -1,8 +1,9 @@
 ## Cloud-Based Intell. Application Development CPS449
 
 ### Course Info.
-instructor:[Dr. Phu Phung](http://academic.udayton.edu/PhuPhung/)
-Prereq: CPS 350
+
+instructor:[Dr. Phu Phung](http://academic.udayton.edu/PhuPhung/)  
+Prereq: CPS 350  
 Teaching Assistant: By Appointment
 
 ### Course Description
@@ -45,19 +46,19 @@ built by the third sprint.
 1. (Optional) Cloud deployment with docker 
 
 ### Textbook
-**No required reading/txtbook**. Lecture handouts are provided. 
-**Recommended Reading:**
+**No required reading/txtbook**. Lecture handouts are provided.  
+**Recommended Reading:**  
 Essentials of cloud computing, K. Chandrasekaran, CRC Press, 2015 [Free online]
 
 ### Shell + git
 Shell and git are not taught for some reason in CS courses; thus we need to allow 
-students to learn them on their free time cause our schedule is absolute trash:
+students to learn them on their free time cause our schedule is absolute trash:  
 
-[MIT 'The Missing Semester of Yoru CS Education'](https://missing.csail.mit.edu/2020/course/shell)
+[MIT 'The Missing Semester of Yoru CS Education'](https://missing.csail.mit.edu/2020/course/shell)  
 
-[Google Cloud Shell](ssh.cloud.google.com)
+[Google Cloud Shell](ssh.cloud.google.com)  
 
-[Using git](https://missing.csail.mit.edu/2020/version-control)
+[Using git](https://missing.csail.mit.edu/2020/version-control)  
 Imagine not teaching git to cs students... tf?
 
 ### Assessments and Grading Policy
@@ -67,3 +68,29 @@ Imagine not teaching git to cs students... tf?
 1. Final essay: 10
 1. team project: 20
 
+### Course Schedule:
+1. Intro to course + cloud computing
+ 1. cloud environment setup
+1. Virtualization and the web in cloud computing
+ 1. Cloud vMachines + foundation of web
+1. Front-end development
+ 1. Front-end development with JS + CSS, jQuery
+1. Intro to team project + getting started in back-end
+ 1. Back-end web dev with nodejs
+1. Microservices architecture + implementation with express
+ 1. microservice development and cloud deployment on azure+heroku
+1. Full stack dev. and cloud database with mongoDB
+ 1. integrating nodejs with mongoDB
+1. Realtime apps with socket.io
+ 1. realtime apps with simple webchat system
+1. Database manipulation & individual programming assignment introduction+tutorial
+ 1. assingment support via zoom
+1. Assignment tutorial + sprint 2 introduction and guidelines
+ 1. live support via zoom
+1. Sprint 2 + preparation advanced front-end ui + sprint 2 tutorial
+ 1. sprint 2 support on zoom
+1. Introduction to devOps + containers + amazon cloud services
+ 1. sprint 3 tutorial (IMAGINE STARTING CONTAINERS NOWXD?)
+1. Course review + project tutorial
+ 1. Project presentations + demo
+ 1. Essay (in lieu on final exam)
