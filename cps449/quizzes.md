@@ -70,4 +70,53 @@ A. [] jquery is a js library built in every browser
 A. [x]
 A. []
 
-# 3.6
+# 4.1 function fs.watch in the code below is...
+A. [] asynch
+A. [] non-blocking
+A. [] executed in new thread
+A. [x] a and b
+A. [] none
+
+# 4.2 what is the response content for ajax get request
+A. [x] the code...
+B. [] echo.php
+C. [] test
+D. [] nothing
+E. [] none of the above
+
+# 4.3 a node js web server
+A. [] can do backend computation
+A. [] can handle input for a request and generate different responses
+for the same type of request
+A. [] can handle multiple connects from different browser
+A. [] a and b
+A. [] a,b and c
+
+# 4.4 what is the output from the program in js/nodejs
+A. [] 123
+B. [x] 132
+C. [] 12
+D. [] 13
+E. [] error
+
+# 4.5 an express.js application is
+A. [] is a web app
+A. [] is a http server
+A. [] can be used to make web api's + services
+A. [] a and b
+A. [x] a, b and c
+
+# 5.1 monolithic application architecture; 3 layers?
+A. [] view, service, domain
+B. [x] view, business, data
+C. [] client, view, data
+D. [] client, domain, server
+E. [] none
+
+# 5.2 in microservice architecture
+A. [] each service should have separate codebase + managed by small team
+B. [] each service should be responsible for its own data
+C. [] services within a system must be written in same programming tech
+D. [x] a and b
+E. [] a, b and c
+A. []
