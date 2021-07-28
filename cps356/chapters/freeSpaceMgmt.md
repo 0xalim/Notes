@@ -10,7 +10,7 @@ of alternate approaches.
 
 # Assumptions
 1. basic interface: malloc() free() exist.
-1. one memory is handed out, cannot change location.
+1. once memory is handed out, cannot change location.
 1. no compaction due to assumption 2.
 1. single fixed sized contiguous region given by allocator.
 
