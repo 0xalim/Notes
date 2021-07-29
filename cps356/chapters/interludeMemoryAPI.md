@@ -149,7 +149,7 @@ auto memory. declaring memory e.g:
 1. mmap() used to create anonymous memory region within program, associated
  with swap space.
 1. other calls:
- 1. calloc() allocates memory then zeros it before retuning.
+ 1. calloc() allocates memory then zeros it before returning.
  1. realloc() used for memory not in use, makes new larger region of
      memory by copying old region into it
 

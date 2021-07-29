@@ -85,7 +85,8 @@ physical address = 0 + 32 = 32 (physical address)
 	
 ```
 os@boot			hardware			no prog
-init trap table		address of sysCall handler
+init trap table		
+			address of sysCall handler
 			timer handler
 			illegal mem-access handler
 			illegal inst-handler
