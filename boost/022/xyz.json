@@ -1,0 +1,44 @@
+
+"intro to json",
+"no comments in json btw",
+
+"some random text",
+17,
+true,
+
+"numbers",
+23,
+12,
+1.2,
+
+"arrays",
+["some", "random", "text"]
+
+
+{
+	"name": "bob",
+	"age": "3",
+	"person": true
+},
+
+
+"common json bad formatting",
+
+{"name": "bob", "age": 3, "person": true},
+{"name": "alice", "age": 5, "person": true},
+
+"proper json formating",
+[
+	{
+  		"name": "bob",
+ 		"age": 3,
+ 		"person": true,
+		"random": null
+	},
+	{
+  		"name": "alice",
+  		"age": 5,
+  		"person": true,
+		"random": null
+	}
+]
