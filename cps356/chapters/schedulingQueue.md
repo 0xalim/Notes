@@ -4,16 +4,16 @@ tries to solve: good turnaround time + good response time (interactive).
 Crux: How can we build a scheduler minimize both response time + turnaround time
 without knowing runtime of jobs prior?
 
-# mlfq basic rules:
+### mlfq basic rules:
 
 1. If prioA > prioB; A runs B doesn't
 1. If prioA = prioB; A & B in rr
 
-# simulation
+### simulation
 1. start job; if cpu heavy then lower prio
 1. if job takes little time (less than timer-interrupt) keep prio
 	
-# How to change prio?
+### How to change prio?
 1. rules to keep consistency:
  1. when job enters system, place in highest prio
  1. if job uses entire slice, reduce prio
@@ -34,11 +34,11 @@ without knowing runtime of jobs prior?
 1. schedular assumption: need to assume the arriving job is a short job
  everytime and drop prio as needed
 
-# What about I/O?
+### What about I/O?
 1. If requests i/o before time slice then keep priority
 1. good because if the job is an interactive one, it keeps response time
 
-# Issues with current system:
+### Issues with current system:
 1. starvation: too many interactive jobs prevent longer jobs from ever
  running (thus starving the job).
  1. users could rewrite program to perform i/o operation before time slice,
@@ -46,17 +46,17 @@ without knowing runtime of jobs prior?
  1. programs can change behaviour overtime, thus changing from heavy cpu
      user to an interactive job.
 
-# Priority boost:
+### Priority boost:
 1. to prevent starvation: periodically reset priority; throwing all
  jobs to top of queue again. This prevent jobs that are now interactive
  jobs sitting at lowest prio.
 1. another issue arrises: how long to set S (periodic reset timer)?
 
-# Better Accounting
+### Better Accounting
 1. to prevent gaming the scheduler: give all jobs a time allotment
  so that their overall timer matters instead of short burst timer. 
 
-# Tuning mlfq timers:
+### Tuning mlfq timers:
 1. Different systems use different methods of values for these variables 
  (S, timer-interrupt, etc)
  1. Solaris: Time sharing scheduling class configurable table

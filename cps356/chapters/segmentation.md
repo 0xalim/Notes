@@ -6,7 +6,7 @@ properties.
 
 crux: support large address space (with free space in the middle)
 
-## Generalized base+bounds:
+### Generalized base+bounds:
 1. every component of a process can have it's own base+bound, so 3 total 
  pairs of base+bound.
 1. location of each component of the process does not matter, so change
@@ -17,7 +17,7 @@ crux: support large address space (with free space in the middle)
 1. each base+bound has it's own size(limit/size)
  1. now hardware can tell exactly how many bytes are valid in the segment
 
-## which segment are we reffering to?
+### which segment are we reffering to?
 1. explicit approach: take the top few bits of the virtual address to 
  determine the type of segment + offset.
  1. via example in 16.1:
@@ -33,7 +33,7 @@ crux: support large address space (with free space in the middle)
  1. if address from stack/base pointer -> stack segment
  1. if address from other- > heap segment
 
-## What about the stack?
+### What about the stack?
 1. because segment can grow in the opposite direction (decreasing value)
  we need hardware for direction of growth.
  1. 1 positive direction
@@ -44,7 +44,7 @@ crux: support large address space (with free space in the middle)
  1. left with offset of 3kb; minus max segment from 3; 3-4 = -1kb+28kb = 27kb
  1. absolute value of negative offset |-1kb| <= size(2kb)
 
-## Support for sharing
+### Support for sharing
 1. sharing certain memory segments between address spaces
  1. code can be shared, via multiple process having access to the code segment
  1. extra hardware bits are needed for rwx. 
@@ -52,13 +52,13 @@ crux: support large address space (with free space in the middle)
  1. with the protection bits, need exception handling for processes that try to
      --x from r-- segments, or -w- from r-x segments. Permissions!
 
-## Finegrained vs Coarsegrained segmentation
+### Finegrained vs Coarsegrained segmentation
 1. above explained segmentation: coarse grained (large segments)
 1. finegrained: lots more flexible smaller segments
 1. hardware support for segment table to support different segmentation types
  is needed
 
-## OS support:
+### OS support:
 1. what should the os do in a context switch?
  1. segmentation registers need to be saved+restored (for every process)
 1. os interaction when segments grow/shrink (heap using malloc/realloc).

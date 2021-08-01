@@ -18,7 +18,7 @@ Idea:
  1. hwo does os stop program from running + switch to another process
     (time sharing requires virtualizing the cpu)
 
-## Problem One: Restricted Operations
+### Problem One: Restricted Operations
 1. cpu modes:
  1. user mode: restricted to what program can do (no i/o request)
  1. kernel mode: program can run what it likes (including i/o request)
@@ -40,7 +40,7 @@ Idea:
  1. this overhead serves as os protection rather than the program knowing the 
     exact address of something, it only knows this assigned number
 
-## LDE Protocol
+### LDE Protocol
 1. step 1: during boot time
  1. kernel init's trap table
  1. cpu remembers location for use
@@ -51,7 +51,7 @@ Idea:
  1. when process issues system call, trap instruction, and return once again
  1. program now has complete all its work and returns from main()
 
-## Problem 2: Switching Between Processes
+### Problem 2: Switching Between Processes
 * crux: when a process is running on the cpu it means the os is not running.
   so how can the os do anything at all? how does the os regain control of the
   cpu so it can switch between processes.

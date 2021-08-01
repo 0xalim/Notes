@@ -8,7 +8,7 @@ than the request. known as external fragmentation.
 crux: how to manage free-space; how to minimize fragmentation; time+space overhead
 of alternate approaches.
 
-# Assumptions
+### Assumptions
 1. basic interface: malloc() free() exist.
 1. once memory is handed out, cannot change location.
 1. no compaction due to assumption 2.
@@ -40,7 +40,7 @@ focusing on external fragmentation because:
 1. simplicity
 1. more interesting :)
 
-## Low-level Mechanisms:
+### Low-level Mechanisms:
 goals:
 1. basics of *splitting* + "coaelescing"
 1. how to track size of allocated regions easily

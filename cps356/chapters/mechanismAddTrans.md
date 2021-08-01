@@ -9,7 +9,7 @@ flexibility needed to applications (flexibility: let the process do
 what it wants with the address space provided). how to maintain control
 over memory.
 
-# Hardware-based address translation: 
+### Hardware-based address translation: 
 1. when the process tries to access memmory (load, store, w/e) it  
  points to x location of memory, but it's virtualized. 
 1. hardware needs to translate this address to the physical location  
@@ -21,12 +21,12 @@ over memory.
  1. which locations are in use
  1. intervene when necessary to memory access by process
 
-# Assumptions:
+### Assumptions:
 1. user address space placed *contiguously* (sharing a boundary)
 1. size of address < physical memory
 1. each address space is the same size
 
-# Example:
+### Example:
 1. example code of taking value; adding 3; storing it back:
 
 ```C
@@ -42,7 +42,7 @@ x += 3;
 135: movl %eax, 0x0(%ebx)		// store eax back to mem
 ```
 
-# Dynamic (hardware-based) relocation:
+### Dynamic (hardware-based) relocation:
 1. dynamic relocation <-> base and bounds (same meaning)
 1. base = starting position; bounds = end position
 1. physical address space = virt address = base. e.g:
@@ -58,7 +58,7 @@ physical address = 0 + 32 = 32 (physical address)
 1. *dynamic* because relocation at runtime; can move address space
 1. 1 base+bounds per cpu (on chip) sometimes called mmu (mem mgt unit)
 	
-# Hardware requirements summary:
+### Hardware requirements summary:
 1. privileged mode: prevent user-mode process from executing priviOps
 1. base+bound: support address translation
 1. translate virtMem -> Phys mem + check if OOB
@@ -66,7 +66,7 @@ physical address = 0 + 32 = 32 (physical address)
 1. privi instruction for exception handling: illegal address access
 1. ability to raise exceptions. (location of handler = priviOperation)
 
-# Operating system issues: {via example 15.2}
+### Operating system issues: {via example 15.2}
 1. os 1st slot; 2 slot empty; 3 slot process; 4 slot empty; free list
 1. os does work if process is terminated/killed (free data structure) +  
  put memory back on free list
@@ -81,7 +81,7 @@ physical address = 0 + 32 = 32 (physical address)
  that handles when process accesses oob/runs instructions it  
  cannot. usually terminating the process.
 
-# Total boot table now:
+### Total boot table now:
 	
 ```
 os@boot			hardware			no prog

@@ -3,7 +3,7 @@
 crux: How to allocate and manage memory in Unix / C programs; what interfaces
 are used + mistakes to avoid.
 
-## Types of memory:
+### Types of memory:
 1. stack memory: (de)allocations are handeld implicity by compiler, called  
 auto memory. declaring memory e.g:
 		
@@ -31,7 +31,7 @@ auto memory. declaring memory e.g:
 1. issue with heap memory is programmer inability to clean/understand and
  this leads to lots of security issues too.
 
-## The malloc() call:
+### The malloc() call:
 1. use malloc() to allocate, pointer if succeeds or NULL if failure	
 1. programmer often do not supply numbers in malloc() instead vars e.g:
 
@@ -53,7 +53,7 @@ auto memory. declaring memory e.g:
 
 1. gets the length of string + 1 for end-of-string
 
-# The Free call:
+### The Free call:
 1. free(): used to deallocate memory in heap. e.g:
 
 	```C
@@ -63,7 +63,7 @@ auto memory. declaring memory e.g:
 1. free() takes 1 argument, the pointer returned by malloc(), so it has
  to keep track of itself
 
-# Common errors:
+### Common errors:
 1. forgetting to allocate memory. e.g:
 
 	```C
@@ -136,11 +136,11 @@ auto memory. declaring memory e.g:
 
 1. passing it wrong pointer; invalid frees are not good!
 
-# Valgrind:
+### Valgrind:
 1. check out valgrind (shown in perugini's course being used + it's in
  the syllabus)
 
-# Underlying os support:
+### Underlying os support:
 1. malloc() and free() are lib calls not sys calls.
 1. built ontop of sys calls, such as brk and sbrk they are used to 
  increase/decrease (sbrk increments) memory

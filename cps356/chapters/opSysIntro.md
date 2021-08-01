@@ -1,6 +1,6 @@
 # Operating Systems 356
 
-## Virtualization
+### Virtualization
 
 crux: how does the os do what it does + efficienctly? Hardware suport? Virt?
 
@@ -16,7 +16,7 @@ virt memory: running multiple instances of a process on the same address space
 making it seem like the os is allocating private memory instead of sharing
 physical memory per process
 
-## Concurrency
+### Concurrency
 
 crux: if there are multiple processes executing threads within the same address
 space, how to build a correctly working program?
@@ -62,7 +62,7 @@ Final value: 143012
 Expected : 2N = 2000000
 ```
 
-## Persistance
+### Persistance
 
 crux: how does the os store data persistently, and manage it. what sort of 
 algorithms are needed + policies for good performance. what happens if there
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-## Overview
+### Overview
 
 os tasks:
 1. virtualization

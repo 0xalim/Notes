@@ -6,7 +6,7 @@ be much slower. having to grab memory for translation every fetch/load is slow.
 *crux: how can we speed up translation; how can we avoid extra memory lookup; any
 hardware or os involvement?*
 
-## TLB + algorithm
+### TLB + algorithm
 tlb: translation-lookaside buffer (old name) is essentially an address-translation
 cache. hardware checks here first before using another memory lookup. allows popular
 processes to run fast. mmu.

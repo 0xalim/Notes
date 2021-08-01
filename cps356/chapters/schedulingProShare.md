@@ -9,14 +9,14 @@ processes that should run more often get more chances to win the lottery.
 Crux: How to design a scheduler that shares cpu time proportionally? What are
 the mechanisms + how effective are they?
 
-# Basic concept: Tickets represent your share
+### Basic concept: Tickets represent your share
 1. tickets: used to represent the share of a resource the process 
  should receive. e.g A = 75 tickets (75%), B = 25 tickets (25%)
 1. this is a nondeterministic method.
 1. scheduler must know total number of tickets.
 1. then chooses number between 0 - 99
 
-# Ticket mechanisms:
+### Ticket mechanisms:
 1. ticket currency: allows user to ticket to allocate tickets among their 
  own jobs (using w/e currency)
 1. auto converts w/e currency to global value. e.g:
@@ -39,13 +39,13 @@ the mechanisms + how effective are they?
      tickets if it needs more cpu time. good because no communication 
      occurs between processes.
 
-# Implementation:
+### Implementation:
 1. each process has x number of tickets
 1. choose random number as winner (harder than it seems)
 1. have counter start at 0 and count up x number of process tickets
 1. until counter > winner, thus the process it's on is the winner
 
-# Unfair metric:
+### Unfair metric:
 1. simulate example with 2 jobs a, b with equal number of tickets
 1. one has to finish before the other due to the lottery system
 1. calculate unfairness metric via Aendtime / Bendtime = U
@@ -53,7 +53,7 @@ the mechanisms + how effective are they?
 1. running simulation from 1 to 1000 R (runtime), the lower the runtime the 
  farther U is from 1. 
 
-# Why not deterministic?
+### Why not deterministic?
 1. randomness sometimes doesn't deliver, esp. if short time scale.
 1. stride scheduling: deterministic fair-share scheduler
  1. stride inverse proportional to ticket number (largeX/tickets)
@@ -65,7 +65,7 @@ the mechanisms + how effective are they?
  the pass value would = 0, thus takes all cpu until another pass 
  value is lower.
 
-# Linux Completely Fair Scheduler
+### Linux Completely Fair Scheduler
 1. advanatge of cfs over others: little overhead (5% only); due to:
  1. good datastructure
  1. inherent design
@@ -86,21 +86,21 @@ the mechanisms + how effective are they?
 
 1. cfs timer-interrupt = 1ms that it wakes up and makes decisions
 
-# Weighting (niceness)
+### Weighting (niceness)
 1. cfs  gives control of process priority to users/admins allowing them 
  to change the 'nice' value (-20 -> 19)
 
 1. in book shows examples of running through tiime.slice(k) equation
  and vruntime(i). Eq. shown in book fig 9.1+2
 
-# Red-black trees
+### Red-black trees
 1. cfs uses rb-trees as data structure with low depth to search through
  possible proces.
  1. only running/runnable processes are in this tree
  1. if process sleeps/performs i/o it will drop it from the tree
  1. rb-tree remember are logarithmic + balancedh
 
-# Dealin with i/o + sleeping processes
+### Dealin with i/o + sleeping processes
 
 process A continuously runs while B goes to sleep for 10s, after B wakes
 up it will have vruntime 10s less than A. meaning cfs will choose this and 

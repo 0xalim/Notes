@@ -8,7 +8,7 @@ is a fixed sized array that contains slots called page frames.
 are the basic techniques and how we make them work well? esp. with minimal
 space and time overheads*
 
-## Simple Example and Overview
+### Simple Example and Overview
 paging format:
 1. fixed-sized variables
 1. virtual addresses placed anywhere
@@ -57,7 +57,7 @@ to be answered:
 1. contents of page tables + their size?
 1. is paging too slow?
 
-## Where are Page Tables Stored?
+### Where are Page Tables Stored?
 assuming easy linear array for simplicity now; os indexes by *vpn* and looks 
 up the page-table entry *pte* at that index to find the *pfn*.
 
@@ -73,7 +73,7 @@ space between the stack+heap (which will be marked invalid) os will terminate
 1. reference bit: indicates whether page has been accessed (determines popular
  pages). good for page replacement (later topic)
 
-## Paging is Too Slow:
+### Paging is Too Slow:
 instruction:
 
 	```
