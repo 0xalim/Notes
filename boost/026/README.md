@@ -62,5 +62,3 @@ things currently in my bashrc file: (may be updated)
  1. globstar
 1. aliases:
  1. c = clear
-
-fin
