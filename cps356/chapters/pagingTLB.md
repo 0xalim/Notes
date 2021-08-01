@@ -63,10 +63,10 @@ Modern era: the software
  1. hardware retries - tlb hit !
 1. MIPS R10k; Sun's SPARCV9 are software managed tlb's
 
-note on *modern era* software managed tlb's:
+
+*note on modern era software managed tlb's:
 
 the system return-from-trap call (seen before) resumes instructions from the
 one that caused the trap. in this case, the hardware must retry for a tlb hit.
 this mean's the program counter saved must be different depending on the 
-exception that was caused.
-
+exception that was caused. *
