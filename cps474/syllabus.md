@@ -1,11 +1,13 @@
 # Software Security - 474
 
+```
 Classroom: TBA
 Requisites: 350 / 501
 Instructor: Dr. Phu Phung
 Telephone: (937) 229 3845
 Office Hour: TBA
 Grader: TBA
+```
 
 ### Description
 The course will cover fundamental topics of programming language-based concepts
