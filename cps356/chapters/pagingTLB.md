@@ -82,7 +82,7 @@ advantages of software\>hardware:
 
 ### TLB Contents
 
-1. 32, 64. 128 entries
+1. 32, 64, 128 entries
 1. fully associative: translations can be anywhere
 1. hardware will search entire TLB in parallel for desired translation
 
