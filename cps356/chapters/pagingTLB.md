@@ -64,9 +64,75 @@ Modern era: the software
 1. MIPS R10k; Sun's SPARCV9 are software managed tlb's
 
 
-*note on modern era software managed tlb's:
+*note on modern era software managed tlb's:*
 
-the system return-from-trap call (seen before) resumes instructions from the
+*the system return-from-trap call (seen before) resumes instructions from the
 one that caused the trap. in this case, the hardware must retry for a tlb hit.
 this mean's the program counter saved must be different depending on the 
-exception that was caused. *
+exception that was caused.*
+
+*secondly, os needs to be careful not to cause an infinite loop of tlb misses.
+2 solutions for fixing this is, to keep the tlb miss handlers in physical memory
+unmapped and subject to modification/removal. the other solution is to create
+a permanent address translation and store the tlb miss handlers there.*
+
+advantages of software\>hardware:
+1. more flexible, subject to data structure change if needed (not hardware)
+1. simplicity (raises exception and lets os handle it)
+
+### TLB Contents
+
+1. 32, 64. 128 entries
+1. fully associative: translations can be anywhere
+1. hardware will search entire TLB in parallel for desired translation
+
+TLB Entry Example: `VPN     |     PFN     |     other bits`
+
+1. Other bits possibilities:
+ 1. valid bit: whether the entry is a valid translation or not
+ 1. protection bit: determines access of a page
+ 1. address-space identifier
+ 1. dirty bit (modified or not)
+ 1. and more
+
+### TLB Issue: Context Switches
+
+when switching to another process to run, hardware+/os has to make sure that the
+about-to-run process does not accidentally use translation from previous process
+
+example:
+1. p1 is running, assumes tlb cache translations are valid for it (same page table)
+1. assume 10th vpage of p1's page table mapped -> physical frame 1000
+1. os performs switch to p2 and runs it.
+1. 10th vpage of p2 mapped -> phyical frame 170
+
+*  vpn translates to same address for p1 and p2; how can hardware distinguish this?
+
+*crux: when context switching, translations in the tlb for last process are not
+meaningful to the next process. what should hardware+/os do in this case?*
+
+fix 1: flush tlb
+1. set all valid bits to 0 thus flushing the tlb
+1. working solution! not.
+ 1. each new context switch incurs tlb miss
+ 1. frequent switching leads to higher cost (slower speed)
+
+fix 2: introducing address-space identifiers
+1. hardware support
+1. essentially process id (with fewer bits) for each process
+
+example:
+```
+	VPN    |    PFN    |    VALID    |     prot    |    ASID
+	10     |    100    |      1      |      r-x    |      1
+	10     |    171    |      1      |      r-x    |      2
+```
+
+scenario: what if PFN is the same while VPN is different (2 processes using same code)
+```
+	VPN    |    PFN    |    VALID    |     prot    |    ASID
+	10     |    101    |      1      |      r-x    |      1
+	50     |    101    |      1      |      r-x    |      2
+```
+sharing physical address space, same code for example, is good because it reduces
+memory overheads
