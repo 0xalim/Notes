@@ -136,3 +136,35 @@ scenario: what if PFN is the same while VPN is different (2 processes using same
 ```
 sharing physical address space, same code for example, is good because it reduces
 memory overheads
+
+### Issue: Replacement Policy
+
+*crux: regarding cache replacement; which tlb entry should be replaced when adding
+a new tlb entry? goal is to minimize miss rate, never forget!*
+
+for detailed overview look into swapping chapters later on.
+
+typical policies:
+1. least-recently-used: takes advantage of locality, not good entry then remove
+1. random approach: good for corner cases
+
+### Real TLB Entry
+
+*Looking at MIPS R4000 - software managed*
+1. vpn: virtual address
+1. pfn: physical frame number
+1. global bit: pages that are global to every process
+1. asid: address space identifier (not present if global is present)
+1. coherence bits: how pages are cached by hardware (assuming swap, etc?)
+1. dirty bit: modified page or not
+1. valid bit: valid translation present in entry
+1. page mask: supports multiple page sizes (lter)
+1. unused bits: saved for os when needed (tlb miss handler for example)
+
+tlb instructions: privileged for obvious reasons
+1. tlbr: read contents of tlb entry
+1. tlbwi: replace specific tlb entry
+1. tlbwr: replace random tlb entry
+1. tlbp: probe tlb to see if translation is present
+
+fin
