@@ -76,3 +76,29 @@ algorithms do exist. *Most Frequently/Recently Used*. However, they don't
 perform as well.
 
 ### Workload Examples
+
+*Look at more examples, but instead of small traces we want bigger workloads
+to see how good these policies are(or not)*
+
+* These worklaods have no loaclity, as random as possible accessing pages.
+
+![Workload](https://imgur.com/lbERsWm.png)
+
+1. y-axis: hit rate policy achieves
+1. x-axis: cache sized
+
+Page above shows difference between policies we have discussed already. They
+are all essentially the same besides the optimal policy.
+
+### 80-20 Workload
+
+Exhibits locality; 80% of references are make to 20% of pages, while the 
+remaining 80% of references are made to 20% of pages. Hot pages are ones
+that are referenced most of the time, cold are the remainder.
+
+![80-20](https://imgur.com/qNpE141.png)
+
+As seen from the graph above, we have better outcomes all over the board. But
+LRU does noticably well, more so than random and fifo. Optimal is still best.
+
+### Looping Sequential Workload
