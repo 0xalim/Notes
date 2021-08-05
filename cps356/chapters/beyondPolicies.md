@@ -1,5 +1,11 @@
 # Beyond Physical Memory: Policies
 
+```
+Sources for graphs are as usual from the book:
+[Ostep](https://pages.cs.wisc.edu/~remzi/OSTEP/)
+
+```
+
 Cases where we are under memory pressure; the os has to start paging out pages
 and start making room for newer stuff. This replacement policy is an important
 aspect. 
@@ -30,7 +36,7 @@ Pmiss = Probability of not finding the data in cache (miss)
 Cost of disk access is high in modern systems, so missing will dominate
 the overall AMAT of running programs. 
 
-### Optimal Replacement Policy
+## Optimal Replacement Policy
 
 Developed by *Belady*, called MIN; we throw out the page that will be accessed
 the furthest in the future. The ones we access now hold more value to us. We
@@ -75,7 +81,7 @@ These policies are better than random and fifo; the opposite of these
 algorithms do exist. *Most Frequently/Recently Used*. However, they don't 
 perform as well.
 
-### Workload Examples
+## Workload Examples
 
 *Look at more examples, but instead of small traces we want bigger workloads
 to see how good these policies are(or not)*
@@ -102,3 +108,16 @@ As seen from the graph above, we have better outcomes all over the board. But
 LRU does noticably well, more so than random and fifo. Optimal is still best.
 
 ### Looping Sequential Workload
+
+For example, we refer to 50 pages in sequence (from 0 - 49 and loop back). We
+then repeat this process for 10,000 accesses to 50 unique pages. 
+
+![Looping-sequential](https://imgur.com/IpVyex1.png)
+
+This workload is common in commercial applications, like databases has worst
+case for both the LRU and FIFO. Because we're looping the workload, the older
+pages are going to be accessed sooner than the page the policy prefers to keep
+in cache. Random is much better, reasoning for this is random has property to 
+not have weird corner-cases unline FIFO and LRU
+
+## Implementing Historical Algorithms
