@@ -1,6 +1,6 @@
 # Beyond Physical Memory: Policies
 
-Sources for graphs are as usual from the book:
+Source for every content here is as usual:
 [Ostep](https://pages.cs.wisc.edu/~remzi/OSTEP/)
 
 Cases where we are under memory pressure; the os has to start paging out pages
@@ -118,3 +118,75 @@ in cache. Random is much better, reasoning for this is random has property to
 not have weird corner-cases unline FIFO and LRU
 
 ## Implementing Historical Algorithms
+
+*Crux: now we understand these algorithms and worklaods more, how do we implement
+them? Won't we have too much overhead and cause performance issue? Even
+with hardware support scanning after each memory reference is too much 
+overhead; so can we survive with just an approximation?*
+
+### Approximating LRU
+
+Approximation works fine in this case. The implementation requires hardware
+support via a *use bit* sometimes called *reference bit*. One use bit per 
+page of the system, and it lives in memory somewhere. When the page is accessed
+the use bit is set to 1 by the hardware. Hardware never reset it, thats the job
+for the os. 
+
+1. Use bit in memory
+1. Each page has use bit
+1. Memory reference: hardware updates use bit to 1
+1. Os resets use bit when necessary back to 0
+
+Clock algorithm:
+1. Imagine circular list
+1. Clock hand points to page P (doesn't matter which)
+1. When replacement is needed, check if use bit is 1
+1. Is it?
+ 1. Then replace use bit to 0 and increment P+1
+1. Is it not?
+ 1. Candidate for replacement 
+1. Worst case: Every bit was set to 1 and we looped entire list
+
+*Any algorithm would suffice as long as it would differentiate between use 
+bit 0 and use bit 1; the clock algorithm was good because it didn't scan entire
+memory for unused pages*
+
+### Considering Dirty Pages
+
+Modification of clock algorithm: has page been modified while in memory?
+1. Yes: bit is dirty, needs to write back to disk (which is expensive)
+1. No: bit is clean, eviction is free and no need to write to disk.
+
+Implementation:
+1. Include modified bit (dirty bit)
+1. Clock algorithm can scan for pages that are clean + set to 0
+1. If none is found, then evict those with 0 and dirty bit
+
+## Other VM Policies
+
+* Page selection policy, assuming that if code page P is accessed then most
+likely page P+1 may be accessed so the os will prefetch.
+
+* On-demand is what we have seen so far, when the page is needed to be accessed
+we call for a replacement / fetch.
+
+* Clustering / grouping is when many pages need to be written to disk, so in-
+stead of writting each page back when it needs to we group them into clusters 
+and write them all at once. Efficient because of nature of disk drives, it's 
+better to perform a large write more efficiently than many small ones.
+
+## Thrashing
+
+* Thrashing: when there just isn't enough space, the system will constantly be
+paging.
+
+* Admission control: idea is, it's better to do less work well then everything
+at once poorly. So we kill off some subprocesses in the hopes that it free's
+up space for progression. Needs mechanism to detect + cope with trashing.
+
+* Draconian approach: used more nowadays, in some linux environments for
+example there is a out-of-memory killer (oom reaper). If not enough memory is
+avaiable, then kill the most instensive. Obviously this may be bad if we killed
+the X server for example rendering display obsolete.
+
+fin
