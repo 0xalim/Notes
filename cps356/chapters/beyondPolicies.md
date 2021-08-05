@@ -1,10 +1,7 @@
 # Beyond Physical Memory: Policies
 
-```
 Sources for graphs are as usual from the book:
 [Ostep](https://pages.cs.wisc.edu/~remzi/OSTEP/)
-
-```
 
 Cases where we are under memory pressure; the os has to start paging out pages
 and start making room for newer stuff. This replacement policy is an important
