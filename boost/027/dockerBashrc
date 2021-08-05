@@ -47,4 +47,3 @@ shopt -s globstar
 
 # History (vi mode)
 set -o vi
-          

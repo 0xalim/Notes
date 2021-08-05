@@ -30,7 +30,7 @@
 	* Storage + linkage in C
 	* [x] thread + thread functions
 	* [x] procManipulation (wait, exec, building argument vector)
-	* Learn linux shell + environment variables
+	* [x] Learn linux shell + environment variables
 	* [x] Low level I/O
 
 3 - Scheduling
@@ -51,10 +51,10 @@
 	* [x] Fundamentals
 	* [x] Contigous allocation
 	* [] Paging
-	* [] Segmentation + segFaults + buffer overflow
+	* [x] Segmentation + segFaults + buffer overflow
 
 7 - Virtual Memory
 	* [] Demand paging
-	* [] Page replacement algorithm
+	* [x] Page replacement algorithm
 	* [] Allocation
 	* [] Course reflection(./terms)
