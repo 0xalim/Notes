@@ -248,6 +248,8 @@ period. Keep's active list about 2/3 of total page cache size.
 Modern era computing focuses a lot of defensive mechanisms (Linux, Solaris)
 while those from the older era tend not to (VAX/VMS).
 
+### Buffer Overflow
+
 **Buffer Overflow:** find a bug in a system, where attackers can inject
 arbitrary code into the target address space. Developers believe that the
 user input would never be long (wrong!) and thus willingly go ahead with it.
@@ -256,17 +258,83 @@ An overflow occurs in the buffer, overwriting memory of the target.
 *If target precisely crafts an input that injects code, a form of `privilege
 escalation` can occur. If on a network connected device, system can be opened
 up to the outside network or the internal one. At this point what you do
-with this situation is endless. Very bad.*
+with this situation is endless. Very bad.
 
-*Fix: prevent code from running or executing within certain regions of an
+Fix: prevent code from running or executing within certain regions of an
 address space - stack for example. AMD introduced the NX bit (no exec)
 into their version of x86. Intel later on also introduced 'XD' bit in their
 page table entries to accomplish this task.*
+
+### Return-oriented Programming
 
 *ROP: return-oriented programming, lots of 'gadgets' in code, especially C
 program. These gadgets link to C library, so an attack can overwrite the
 stack so the return address in the currently executing function points
 to their desired malicious instruction (or series of). Followed by a
 return instruction. So stringing these 'gadgets' together, the attacker
-can execute arbitrary code.*
+can execute arbitrary code.
 
+Fix: `Address Space Layout Randomization` is a feature that got implemented
+to counter ROP. The os randomizes the locations things point to, so attackers
+can never change precise code consistantly (or at all). Later on it got
+added to the kernel, and thus named `Kernel Address Space Layout Randomization`*
+
+```C
+int main(int argc, char *argv[]) {
+	int stack = 0;
+	printf("%p\n", &stack);
+	return 0;
+}
+```
+
+Output on early systems: (consistant)
+```
+0x7ffd3e55d2b4
+0x7ffd3e55d2b4
+0x7ffd3e55d2b4
+```
+
+Output on newer systems: (randomized)
+```
+0x7ffe1003b7f4
+0x7ffe3e55d2bd
+0x7ffe45522e84
+```
+
+### Meltdown and Spectre
+
+World of systems security turned upside down due to, meltdown and spectre.
+Discovered around the same time (2018). These researchers and engineers
+have questioned the fundamental protections offered by the computer hardware
+and the os above.
+
+Url linked below shows papers on both meltdown and spectre:
+
+<https://meltdownattack.com/>
+
+* Spectre is considered the more problematic of the two so lets take a look at
+that.
+
+*CPU's nowadays perform crazy behind the scenes tricks to improve performance.
+One such known technique is called speculative execution. The CPU guesses
+which instruction will soon be executed in the future, and starts executing
+ahead of time. If the guess is correct the program runs faster, if not the
+CPU undoes the effects on state (register) and tries again.
+
+Speculation leaves traces of execution in various parts of the system, such
+as processor caches and branch predictors. These states can show contents of
+memory, even memory that was protected by the MMU.
+
+One fix is to increase kernel protection, via removing much of the kernel
+address space from each user process and instead have separate kernel page
+table for most kernel data (kernel page-table isolation). So instead of 
+keeping datastructure, code and data into each process we only keep minimum.
+When switching into the kernel, then a switch to kernel page table is needed.
+This improves security and avoids attack vectors but slows performance by*
+***a lot***.
+
+## Lastly, a Reminder
+
+**We encourage you to read them on your own, as we can only provide the
+merest drop from what is an ocean of complexity. But, you've got to start
+somewhere. What is any ocean, but a multitude of drops?**
