@@ -258,9 +258,9 @@ An overflow occurs in the buffer, overwriting memory of the target.
 *If target precisely crafts an input that injects code, a form of `privilege
 escalation` can occur. If on a network connected device, system can be opened
 up to the outside network or the internal one. At this point what you do
-with this situation is endless. Very bad.
+with this situation is endless. Very bad.*
 
-Fix: prevent code from running or executing within certain regions of an
+*Fix: prevent code from running or executing within certain regions of an
 address space - stack for example. AMD introduced the NX bit (no exec)
 into their version of x86. Intel later on also introduced 'XD' bit in their
 page table entries to accomplish this task.*
@@ -272,9 +272,9 @@ program. These gadgets link to C library, so an attack can overwrite the
 stack so the return address in the currently executing function points
 to their desired malicious instruction (or series of). Followed by a
 return instruction. So stringing these 'gadgets' together, the attacker
-can execute arbitrary code.
+can execute arbitrary code.*
 
-Fix: `Address Space Layout Randomization` is a feature that got implemented
+*Fix: `Address Space Layout Randomization` is a feature that got implemented
 to counter ROP. The os randomizes the locations things point to, so attackers
 can never change precise code consistantly (or at all). Later on it got
 added to the kernel, and thus named `Kernel Address Space Layout Randomization`*
@@ -319,13 +319,13 @@ that.
 One such known technique is called speculative execution. The CPU guesses
 which instruction will soon be executed in the future, and starts executing
 ahead of time. If the guess is correct the program runs faster, if not the
-CPU undoes the effects on state (register) and tries again.
+CPU undoes the effects on state (register) and tries again.*
 
-Speculation leaves traces of execution in various parts of the system, such
+*Speculation leaves traces of execution in various parts of the system, such
 as processor caches and branch predictors. These states can show contents of
-memory, even memory that was protected by the MMU.
+memory, even memory that was protected by the MMU.*
 
-One fix is to increase kernel protection, via removing much of the kernel
+*One fix is to increase kernel protection, via removing much of the kernel
 address space from each user process and instead have separate kernel page
 table for most kernel data (kernel page-table isolation). So instead of 
 keeping datastructure, code and data into each process we only keep minimum.
