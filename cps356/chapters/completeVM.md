@@ -331,7 +331,7 @@ table for most kernel data (kernel page-table isolation). So instead of
 keeping datastructure, code and data into each process we only keep minimum.
 When switching into the kernel, then a switch to kernel page table is needed.
 This improves security and avoids attack vectors but slows performance by
-a lot*
+a lot.*
 
 
 ## Lastly, a Reminder
