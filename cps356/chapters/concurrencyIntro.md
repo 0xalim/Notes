@@ -132,7 +132,7 @@ manner.
 synchronization primitives? How do we build these correctly and efficiently?
 How can programs use them to get desired results?*
 
-### Another Problem: Waiting For Another
+## Another Problem: Waiting For Another
 
 We have only mentioned one problem that arrises in concurrency however another
 does exist in this realm. The interaction arises when a process performs a
