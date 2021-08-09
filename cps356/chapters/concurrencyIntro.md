@@ -139,5 +139,3 @@ does exist in this realm. The interaction arises when a process performs a
 disk I/O and is put to sleep; when the I/O completes the process need sto be
 *roused* from its slumber so it can continue. Will be learning more about this
 in the **condition variables** chapter.
-
-fin
