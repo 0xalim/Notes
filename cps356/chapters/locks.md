@@ -306,3 +306,147 @@ void lock() {
 ```
 
 ## Using Queues: Sleeping Instead Of Spinning
+
+We are leaving too much to chance via the algorithms shown above, we either
+fall into issues of starvation or issues where the basic requirement just
+doesn't work. Also, letting threads sit and spin for a long time - especially
+on single CPU machines - is just not good for performance. Need a better
+solution no?
+
+*Next steps it to gain control of which thread next acquires the lock after
+release. We do this by getting some os support + a queue to keep track of
+threads. `park()` and `unpark(threadID)` are two calls used by Solaris systems
+to put a thread to sleep or wake it up.*
+
+```C
+typedef struct __lock_t {
+	int flag;
+	int guard;
+	queue_t *q;
+} lock_t;
+
+void lock_init(lock_t *m) {
+	// ...
+}
+
+void lock(lock_t *m) {
+	while (TestAndSet(&m->guard, 1) == 1)
+		; // acquire guard lock by spinning
+	if (m->flag == 0) {
+		m->flag = 1; // lock held now
+		m->guard = 0;
+	} else {
+		queue_add(m->q, gettid());
+		m->guard = 0;
+		park();
+	}
+}
+
+void unlock(lock_t *m) {
+	while (TestAndSet(&m->guard, 1) == 1)
+		; // acquired guard lock by spinning
+	if (queue_empty(m->q))
+		m->flag = 0; // let go of lock
+	else
+		unpark(queue_remove(m->q)); // give to next thread
+
+	m->guard = 0;
+}
+```
+
+We combine test-and-set with explicit queue of lock waiters to make a more
+efficient lock; and use a queue to control who gets the lock next and avoid
+starvation. This implementation doesn't prevent any spinning as shown in the
+code above, time spinning is however limited a lot more.
+
+When a thread cannot hold the lock, we add it to the queue and set guard to 0.
+We also get the thread id using `gettid()` and yield the cpu. *What would
+happen if guard lock came after the park() and not before?* A `waiting race`
+could occur in this situation. When the first thread tries to set the thread to
+park() if an untimely interrupt context switches to, say the thread holding the
+lock coming to completion and giving the lock away, the switch back would
+lead to the first thread to sleep forever.
+
+Another thing to keep in mind is that flag is never set back to 0 when another
+thread is woken up. When a thread does wake up, it will return from park() but
+does not hold the guard at that point in code. So it cannot even set flag to 1.
+Meaning we just pass the lock directly from first thread to the next.
+
+The fix to the waiting race or wakeup is to add a system call `setpark()`. By
+calling the routine a thread indicates it is *about* to park. If an interrupt
+does occur and another thread calls unpark before park is called, the
+subsequent park returns immediately instead of sleeping.
+
+```C
+queue_add(m->q, gettid());
+setpark();	// new code
+m->guard = 0;
+```
+
+*Another fix is to pass guard to kernel, taking precautions to atomically
+release the lock and dequeue the runnning thread.*
+
+## Different OS, Different Support
+
+We will know look at Linux implementation of `Futex` which is similar to the
+Solaris interface but more in-kernel functionality. Each futex has a physical
+memory associated with it + per-futex in-kernel queue. Callers can use futex
+calls: `futex_wait(address, expected)` and `futex_wake(address)`. The first
+puts a thread to sleep if the address is equal to the expected, otherwise we
+return. The second call wakes a thread waiting in queue.
+
+```C
+void mutex_lock(int *mutex) {
+	int v;
+	if (atomic_bit_test_set (mutex, 31) == 0)
+		return;
+	atomic_increment (mutex);
+	while (1) {
+		if (atomic_bit_test_set (mutex, 31) == 0) {
+			atomic_decrement (mutex);
+			return;
+		}
+		v = *mutex;
+		if (v >= 0)
+			continue;
+		futex_wait (mutex, v);
+	}
+}
+
+void mutex_unlock(int *mutex) {
+	if (atomic_add_zero (mutex, 0x80000000))
+		return;		// no other threads
+	futex_wake (mutex);	// wakeup this thread
+}
+```
+
+*Code snippet from lowlevellock.h in nptl library - part of gnu libc library.
+It uses a single integer to track whether it is locked or not (high bit of
+the integer) and number of waiters on the lock (rest of bits). If the lock
+is negative (high bit 1 = negative integer) it is locked.*
+
+*Code is optimized when there are no other threads waiting for this lock,
+very little work is done. atomic bit test-and-set to lock and an atomic add
+to release the lock.*
+
+*For locking: the first if statement essentially lets thread to hold the lock
+if there are no other threads (mutex == 0). Otherwise move on to see if a thread
+is actually still holding onto that lock. I'm assuming this is if an interrupt
+happened and the thread acting on it dropped it? Once we are sure then set
+the thread to sleep via futex_wait.*
+
+*for unlocking: add mutex to 0x80000000 to counter results in 0 if there are
+no other threads waiting. Otherwise we wakeup the thread using futex_wake.*
+
+## Two-Phase Locks
+
+This lock is extremely dated, since the early 60's this has been used. It used
+to be called `Dahm Locks`. The implementation is a hybrid approach of futex
+and spinning. Essentially we allow the thread to spin for a single cycle (or
+another fixed amount of cycles) and then put to sleep if it has not acquired
+the lock.
+
+Hybrid approaches uses 2 good things to see if it is possible to make a better
+out of both approaches. However producing a single general-purpose lock is quite
+hard due to variation of things that could be different in all systems at all
+times, obviously.
