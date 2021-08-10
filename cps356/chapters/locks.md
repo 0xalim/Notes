@@ -91,7 +91,7 @@ that device has finished reading, how will it know to wake up the processs
 after the read? This method is too inefficient (too slow for modern CPU) and
 has too many drawbacks.
 
-### Failed Attempt: Using Loads/Stores
+## Failed Attempt: Using Loads/Stores
 
 Via the help of CPU hardware and instructions to build a proper lock. We will
 first build a simple one using a single flag variable `flag`. First thread 
@@ -116,7 +116,7 @@ for another thread to release a lock. The performance is even worse in single
 processor due to os context switching to a thread that idly sits waiting in
 this endless loop.
 
-### Building Working Spin Locks with Test-And-Set
+## Building Working Spin Locks with Test-And-Set
 
 Different architectures support test-and-set but call it different names. On
 SPARC it's called load/store unsigned byte instruction (ldstub); on x86 it is
@@ -170,4 +170,13 @@ spins until it becomes available. Need a `preemptive scheduler` for this to
 work on single cpu (interrupts thread via timer, to run another thread) 
 otherwise the cpu will never regain control.
 
-## Evaluating Spin Locks
+### Evaluating Spin Locks
+
+We can start evaluating how effective it is compared to our previous example.
+* Does it provide Correctness? Yes
+* Is it fair? Not for spin locks, it can spin forever under contention
+* Performance?
+	1. For single CPU machines, too much performance overhead
+	1. For multi CPU machines it works well (if #threads ~= #CPU)
+
+## Compare-And-Swap
