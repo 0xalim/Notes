@@ -180,3 +180,129 @@ We can start evaluating how effective it is compared to our previous example.
 	1. For multi CPU machines it works well (if #threads ~= #CPU)
 
 ## Compare-And-Swap
+
+Called compare-and-swap instruction in SPARC machines, others may call it in a
+different name. Implementation is similar to test-and-set and the code itself
+is very similar. See below:
+```C
+int CompareAndSwap(int *ptr, expected, new) {
+	int original = *ptr
+	if (original == expected)
+		*ptr = new		// new thread here
+	return original
+}
+
+...
+
+void lock(lock_t *lock) {
+	while (CompareAndSwap(&lock->flag, 0, 1) == 1)
+	;	// endless spinning
+}
+```
+
+So the value of flag (1 or 0), whether unlocked or locked is compared to 0
+(unlocked). If it is then assign the thread to this lock, but you always
+return `original` is any case.
+
+*The compare-and-swap holds more power over spin lock; however that is only
+applicable when we look at lock-free synchronization. For the time being
+the implementation of spin-lock and compare-and-swap hold the same outcome.*
+
+## Load-Linked and Store-Conditional
+
+Used in MIPS architecture the load-linked and store-conditional instructions
+are used together to build locks. Other architecture such as ARM provide a
+similar instruction set.
+
+*Essentially `load-linked` loads from whatever register we want, but the 
+important conclusion comes from `stored-conditional`. If there have not been
+any locks to my destination since my current load-Linked then I can dump
+whatever im holding to the address.*
+
+```C
+int LoadLinked(int *ptr) {
+	return *ptr;
+}
+
+int StoredConditional(int *ptr, int value) {
+	if (no update to *ptr since LoadLinked to this address) {
+		*ptr = value;
+		return 1;	// success
+	} else {
+		return 0;	// fail
+	}
+}
+
+void lock(lock_t *lock) {
+	while (LoadLinked(&lock->flag) ||
+		!StoredConditional(&lock->flag, 1))
+		;		// spin endlessly
+}
+```
+
+The above implementation of the function lock is the smaller one develoepd by
+undergraduate student David Capel. Uses boolean conditionals. Implementation
+details are exactly as described above. Cannot dump into register if another
+thread has modified the register since my load-linked providing mutual
+exclusion.
+
+## Fetch-And-Add
+
+Use `fetch-and-add` to build a `ticket lock`. Essentially every single thread
+has it's own ticket. So that every thread has the chance to have a turn. If
+`myturn == true` then that thread can now run. Otherwise it has to let the
+tickets (or threads) in front of it to execute first.
+
+```C
+typedef struct __lock_t {
+	int ticket;
+	int turn;
+} lock_t;
+
+void lock_init(lock_t *lock) {
+	lock->ticket	= 0;
+	locker->turn	= 0;
+}
+
+void lock(lock_t *lock) {
+	int myturn = FetchAndAdd(&lock->ticket);
+	while (lock->turn != turn)
+		;	// spin endlessly
+}
+```
+
+One major difference in this impolementation compared to all the other ones
+explained above is that for this one, you know that every single thread will
+execute as long as tickets are being incremented. Every single thread
+will have a go at holding the lock and being in critical section. Which gives
+this implementation *fairness*.
+
+## Simple Approach: Just Yield, Baby
+
+Implement a primitive `yield()` function which a thread calls to give up the
+CPU and let another thread have a go. Three possible thread states are possible
+(running, ready, blocked). Yield is a system call that moves thread from 
+running to ready, promoting another thread to run instead. Essentially the
+thread has just descheduled itself.
+
+*In the case of 2 threads, our approach works well. Thread holds lock, gives up
+the CPU to another thread. Second thread runs and finishes whatever in critical
+section. Easy enough.*
+
+*In case of 100 or more threads contending, one of them will acquire the lock
+and is preempted before releasing it. The other 99 will find it locked and
+yield the CPU. All 99 threads has to execute this yield code before the thread
+can run again. Not good performance.*
+
+*We also have a possibility of starvation, where endless yield calls prevent
+the thread from running. It is only yielding to all others before it executes
+itself.*
+
+```C
+void lock() {
+	while (TestAndSet(&flag, 1) == 1)
+		yield();
+}
+```
+
+## Using Queues: Sleeping Instead Of Spinning
