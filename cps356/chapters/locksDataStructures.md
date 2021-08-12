@@ -347,3 +347,15 @@ int Hash_Look(hash_t *H, int key) {
 Graph above shows the performance comparison, we see how good a hash table
 scales compared to normal concurrent list structure. There is a reason that
 this is the most used compared to all the other ones.
+
+One more thing I'd like to add is this idea of premature optimization that
+is talked about. We have to start out very simple, a big lock that surrounds
+the entire system and then start to optimize when we need more performance.
+Ostep included this quote from *Knuth*.
+
+**Premature optimization is the root of all evil.** - Knuth's Law.
+
+Linux and Solaris had a big lock on kernel, even named `Big Kernel Lock` that
+was used in single CPU systems. When multi-CPU systems were starting to come
+about it was then changed, Linux and Solaris had different ideas for
+optimization, but it all started out as a simple big kernel lock.
