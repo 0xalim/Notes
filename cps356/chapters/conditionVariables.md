@@ -313,3 +313,58 @@ With the implementation above, a consumer can never wake up a consumer and
 the opposite is true as well.
 
 ### The Correct Producer/Consumer Solution
+
+Finally we can rewrite the code to help concurrency become more efficient.
+Specifically by adding more buffer slots, so multiple can be put and multiple
+can get eaten per switch. Slight modifications are needed in function get() and
+put(), also consumer and producer functions need to be changed to handle
+multiple buffer slots.
+
+The complete code can be found in p390 in the ostep book, section 30.2 for
+reference. Write it for exercise if needed.
+
+## Covering Conditions
+
+Cover one more example of how condition variables can be used. Taken from
+the guys who implemented the Mesa semantics (used Mesa language).
+
+```C
+int bytesLeft = MAX_HEAP_SIZE;
+cond_t c;
+mutex_t m;
+
+void *allocate (int size) {
+	Pthread_mutex_lock(&m);
+	while (bytesLeft < size)
+		Pthread_cond_wait(&c, &m);
+	void *ptr = ; // get mem from heap
+	bytesLeft -= size;
+	Pthread_mutex_unlock(&m);
+	return ptr;
+}
+
+void free (void *ptr, int size) {
+	Pthread_mutex_lock(&m);
+	bytesLeft += size;
+	Pthread_cond_signal(&c); // who to signal?
+	Pthread_mutex_unlock(&m);
+}
+```
+
+If there isn't enough space, thread has to wait till more space available
+to allocate. Also, in free() who do we signal that the memory is now free?
+
+*Consider situation: Request1 asks for 100 space, Request2 asks for 10 space.
+We have 0 free space. A request comes to free 50. We should wake up Request2
+because that's the one we can supply right? What if we don't wake up the right
+one? Code above does not work.*
+
+Lampson and Redell (Mesa guys) said the best possible solution to this is to
+wake up every thread asleep. Thus making sure the ones we need awake are. So
+we replace `Pthread_cond_signal()` with `Pthread_cond_broadcast()` instead. The
+downside is obviously performanec, all these threads need to go back to sleep
+after checking their condition again. Called `covering condition`.
+
+This broadcast method would have worked with the Producer/Consumer issue we
+worked on above, however a better solution was available so we use that no? In
+the case of memory allocator now shown, there are no other solutions!
