@@ -26,8 +26,8 @@
 2 - Processes + threads
 	* [x] What is a process (id + pid + intro to fork + terminating process)
 	* [x] Memory alloc / dealloc
-	* Cron jobs
-	* Storage + linkage in C
+	* [~] Cron jobs
+	* [?] Storage + linkage in C
 	* [x] thread + thread functions
 	* [x] procManipulation (wait, exec, building argument vector)
 	* [x] Learn linux shell + environment variables
@@ -38,23 +38,23 @@
 	* [x] Multi-level queues + feedback queues
 
 4 - Concurrency + Synchronization
-	* [] Mutual exclusion + critical section problem
-	* [] Synchro problems
-	* [] Coroutines in lua
-	* [] Intro to Go (example, tour, cmd programming)
+	* [x] Mutual exclusion + critical section problem
+	* [x] Synchro problems
+	* [?] Coroutines in lua
+	* [?] Intro to Go (example, tour, cmd programming)
 
 5 - Deadlock
-	* [] Deadlock prevention + avoidance (bankers algo)
-	* [] Deadlock detection + recovery
+	* [x] Deadlock prevention + avoidance (bankers algo)
+	* [x] Deadlock detection + recovery
 
 6 - Memoery management
 	* [x] Fundamentals
 	* [x] Contigous allocation
-	* [] Paging
+	* [x] Paging
 	* [x] Segmentation + segFaults + buffer overflow
 
 7 - Virtual Memory
-	* [] Demand paging
+	* [x] Demand paging
 	* [x] Page replacement algorithm
-	* [] Allocation
-	* [] Course reflection(./terms)
+	* [x] Allocation
+	* [?] Course reflection(./terms)
