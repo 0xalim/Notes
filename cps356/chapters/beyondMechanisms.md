@@ -1,7 +1,7 @@
 # Beyond Phyiscal Memory: Mechanisms
 
 Going to be relaxing out assumption that every address space is really small, 
-and that it all fints into physical memory perfectly. In reality we have cases
+and that it all fits into physical memory perfectly. In reality we have cases
 where too much stuff is in memory thus we need to move that to bigger but
 faster space. Modern systems usually use the harddrive
 
@@ -19,7 +19,7 @@ Other reasons we need this illusion:
 ### Swap Space
 
 Is a reserved space on the disk for moving pages back and forth, moving it in
-page-sized units. Os needs  to remember the disk address of a given page.
+page-sized units. Os needs to remember the disk address of a given page.
 Sometimes data like binary files are swapped out in place of something more
 important, because the computer knows this information is on disk at all times.
 
