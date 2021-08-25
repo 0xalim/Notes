@@ -115,7 +115,7 @@ This workload is common in commercial applications, like databases has worst
 case for both the LRU and FIFO. Because we're looping the workload, the older
 pages are going to be accessed sooner than the page the policy prefers to keep
 in cache. Random is much better, reasoning for this is random has property to 
-not have weird corner-cases unline FIFO and LRU
+not have weird corner-cases unlike FIFO and LRU
 
 ## Implementing Historical Algorithms
 
@@ -182,7 +182,7 @@ paging.
 
 * Admission control: idea is, it's better to do less work well then everything
 at once poorly. So we kill off some subprocesses in the hopes that it free's
-up space for progression. Needs mechanism to detect + cope with trashing.
+up space for progression. Needs mechanism to detect + cope with thrashing.
 
 * Draconian approach: used more nowadays, in some linux environments for
 example there is a out-of-memory killer (oom reaper). If not enough memory is
