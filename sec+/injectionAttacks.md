@@ -16,7 +16,7 @@ SQL injection:
 
 XML injection and LDAP injection:
 1. XML - extensible markup language
- 1. Set of rules ofr data transfer + storage
+ 1. Set of rules for data transfer + storage
 1. XML injection:
  1. Modify the XML requests
  1. No validation is bad
