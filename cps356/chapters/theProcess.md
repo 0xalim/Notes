@@ -40,7 +40,7 @@ Process API:
 
 Details:
 1. Load code + static data (initialized vars) into address space 
-1. Programs usually executable on disk/ssl; so os reads and puts in address
+1. Programs usually executable on disk/ssd; so os reads and puts in address
    space
 1. Old vs. New:
  1. Old: eager loading
