@@ -6,3 +6,4 @@ tidy similar to what you would like to see your desk and drawers to look like.
 
 * Operating System: Three Easy Steps (OSTEP)
 * Security+ (CERT)
+* Research (WebGuard)
