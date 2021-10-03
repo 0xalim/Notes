@@ -1,7 +1,12 @@
 # WebGuard Research Material
 
+```
 A User‑Oriented Approach and Tool for Security and Privacy Protection 
 on the Web
+
+Phu H. Phung1  · Huu‑Danh Pham2 · Jack Armentrout1 · Panchakshari N. Hiremath1 ·
+Quang Tran‑Minh
+```
 
 ## Javascript Security Examples
 
