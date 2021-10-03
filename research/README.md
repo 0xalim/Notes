@@ -1,6 +1,9 @@
 # WebGuard Research Material
 
-## Javascript Security
+A User‑Oriented Approach and Tool for Security and Privacy Protection 
+on the Web
+
+## Javascript Security Examples
 
 * BrowserShield
 
@@ -58,3 +61,23 @@ First we will look into logging and monitoring all this information, hopefully
 we have some time to implement some policies for testing. If that does not come
 to be because of timing reasons within project deadline[??] we will continue to
 work on related things, and continuing to learn :)
+
+## Overview
+
+The entire idea here is to monitor Js execution client-side. We want to track
+method calls and property access. Idea of sinks and sources here applies heavily
+when we call a function what happens in terms of data transfer from method call
+to method execution, and finally where the computation outcome is used. We will
+essentially hire a bunch of robots and place them in key specific key access
+points to make sure they abide by *our policies*.
+
+```Javascript
+(function() {
+	let reference = original;
+	let code_origin = getCodeOrigin(..);
+	original = wrapper() {
+		if (PolicyCheck(code_origin, reference_name, arguments))
+			execute(reference);
+		}
+	}) ();
+```
