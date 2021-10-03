@@ -4,8 +4,8 @@
 A User‑Oriented Approach and Tool for Security and Privacy Protection 
 on the Web
 
-Phu H. Phung1  · Huu‑Danh Pham2 · Jack Armentrout1 · Panchakshari N. Hiremath1 ·
-Quang Tran‑Minh
+Phu H. Phung · Huu‑Danh Pham · Jack Armentrout 
+Panchakshari N. Hiremath · Quang Tran‑Minh
 ```
 
 ## Javascript Security Examples
@@ -86,3 +86,8 @@ points to make sure they abide by *our policies*.
 		}
 	}) ();
 ```
+
+Js intercept operations:
+1. Method calls
+1. Object creation and access
+1. Property access
