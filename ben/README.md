@@ -93,3 +93,31 @@ Interesting example: If input is sanitized somewhat
 // Original code: var name = 'asd';
 ';+alert(1);//commentOut
 ```
+
+## CSRF
+
+Force client-side action without them user knowing that somethign happened.
+There is no data being lost, but only an action being done. Example below 
+shows how an attacker can submit a post request to /change-email which will
+change the users email without them knowing.
+
+Example: Post request
+```HTML
+<form action="change-email", method="POST">
+	<label for="email">new email:</label>
+	<input type="email" name="new_email">
+	<button type="submit"submit</button>>
+</form>
+```
+
+Example: Get request
+```
+<img/src="http://crypto.com/buy.php?wallet=something&amount=100&type=btc">
+```
+
+Get request above is similar, user visits a link with that in the source code
+then action will happen without them knowing. Some websites have csrf tokens
+for security but you may be able to remove token, and attack due to that token
+not actually being used for anything. Another mistake is that websites may have
+tokens but all users but you can copy a token from one user to another making it
+seem like you are the user.
