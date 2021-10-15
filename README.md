@@ -8,4 +8,4 @@ tidy similar to what you would like to see your desk and drawers to look like.
 * Security+ (CERT)
 * Research (WebGuard)
 * CTF
-* Ben [?]
+* Ben
