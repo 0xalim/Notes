@@ -76,6 +76,11 @@ to method execution, and finally where the computation outcome is used. We will
 essentially hire a bunch of robots and place them in key specific key access
 points to make sure they abide by *our policies*.
 
+Js intercept operations:
+1. Method calls			==> functions of global objects (getElementById)
+1. Object creation and access	==> 
+1. Property access		==> field of objects (cookie)
+
 ```Javascript
 (function() {
 	let reference = original;
@@ -87,7 +92,62 @@ points to make sure they abide by *our policies*.
 	}) ();
 ```
 
-Js intercept operations:
-1. Method calls
-1. Object creation and access
-1. Property access
+**What happens above?** We define an anonymous function that gets & sets the js
+executing code to the variable 'code\_origin'. We will track this code\_origin
+as it tries to do the operations mentioned above.
+
+```Javascript
+var desc = Object.getOwnPropertyDescriptor(Document.prototype, "cookie");
+
+Object.defineProperty(document, "cookie", {get: function(){
+    var code_origin = getCodeOrigin(new Error().stack);
+    if (originAllowed(code_origin, "cookie")) {
+        setOriginSourceRead(code_origin, "cookie");
+	return desc.get.call(document);
+    }
+    return;
+  },
+  set: function(val){ desc.set.call(document,val); },
+  enumerable : false,
+  configurable : false
+});
+```
+
+**What happens above?** We use the Object.defineProperty API to set policies for
+get and set operations to the specified field. The field in this case is the
+'cookie' field. 
+
+```Javascript
+var imgPolicy = {
+    get: function(obj, prop) { /* set policies for get operation */ },
+    set: function(obj, prop, value) { /* set policies for get operation */ }
+};
+var OriginalImage = Image;
+class ImageWrapper {
+    construction(height, width) {
+        var imgObject = new OriginalImage(height, width);
+	imgObject = new Proxy(imgObject, imgPolicy);
+	return imgObject;
+    }
+}
+Image = ImageWrapper;
+```
+
+**What happens above?** Creating new wrapper that gets mediated by proxy object.
+This is due to equivelant function calls not being captured, so we define it 
+ourselves.
+
+## Context Aware Policies
+
+Ideal security mechanism is to control the entire information flow using 
+policies, but we cant do that. So we use endpoint security instead. Anything
+that tries to read from sensitive data sources or tries to send data outside of
+a browser we will monitor. Because we keep track of the code origin we can
+enforce policies that are context aware.
+
+## User-centric policies
+
+We have different strictness levels that users can opt-in for using the popup
+ui. Some function calls made available to all code origins is a security risk 
+so depending on the strictness level, some may be allowed to call and others not.
+Users can also blacklist origins they dont trust.
