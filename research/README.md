@@ -1,8 +1,9 @@
 # WebGuard Research Material
 
+[https://link.springer.com/chapter/10.1007/978-3-030-35653-8_33](Original paper)
 ```
-A User‑Oriented Approach and Tool for Security and Privacy Protection 
-on the Web
+MyWebGuard: A User‑Oriented Approach and Tool for Security and Privacy
+Protection on the Web
 
 Phu H. Phung · Huu‑Danh Pham · Jack Armentrout 
 Panchakshari N. Hiremath · Quang Tran‑Minh
@@ -151,3 +152,82 @@ We have different strictness levels that users can opt-in for using the popup
 ui. Some function calls made available to all code origins is a security risk 
 so depending on the strictness level, some may be allowed to call and others not.
 Users can also blacklist origins they dont trust.
+
+## Js Monitoring Library
+
+We develop a library that will intercept javascript operations; split these
+types of operations into 2:
+
+1. Data Source Access: get data
+1. Data sink channels: send data
+
+### Data Source Access
+
+This is an umbrella for all access to: cookie, html local storage, browsing
+history, location, value of form elements and web page contents. Make sure
+whether code origin is allowed to read, if so mark as read by code origin
+
+```Javascript
+function localStorage_getItem_policy(args, proceed, obj) {
+    var itemID = args[0];
+    var code_origin = getCodeOrigin(new Error().stack);
+    if (originAllowed(code_origin, "localStorage", "getItem", itemID)) {
+        setOriginSourceRead(code_origin, "localStorage");
+        return proceed();
+    }
+    return;
+}
+monitorMethod(localStorage, "getItem", localStorage_getItem_policy)
+```
+
+**What happens above?** we will get the policy regarding localstorage access,
+then we will check whether the code origin is allowed to access this item
+by passing code origin, "localstorage", "getitem", and item id to the function
+`originAllowed`. If it is, then set `setOriginSourceRead` and return.
+
+What calls can access user data:
+
+1. Document.getElement
+1. localStorage.getItem
+1. document.cookie
+1. window.history
+1. navigator.geolocation.getCurrentPosition
+
+All the above are possible access locations we will/need to monitor. Most are
+method calls, some access cookie and local, the obvious one access geolocation.
+
+### Data Sink Channels
+
+This research looks particular only at data sent outside from the browser and
+not redirection attacks and similar things. Maybe for our work we may implement
+something here?? Seems like an interesting gap we can fill between network
+based and javascript based runtime checkers.
+
+## MyWebGuard - Privacy Protection Tool in Browsers
+
+Library is implemented server and client side - we want to further look at
+developing a browser extension that will take care of all of this automatically.
+We do this by insuring our code appended to innerHTML runs before the webpage
+does. We will perform experiments that our code is executed before any other
+code in web page.
+
+```Javascript
+var mywebguard = document.createElement("script");
+mywebguard.innerHTML = '
+(function() {
+    // java interception here
+})();';
+document.documentElement.appendChild(mywebguard);
+```
+
+This extension will be developed first for chromium based browsers, so chrome
+and brave as well as other derivatives of chrome will work.
+
+## End Remarks
+
+Continuing on from here is the conclusion of the original creators work. We will
+not summarize and write any of it as to have the user look at it for themselves.
+Regardless we are not here to summarize and share the outcomes of other peoples
+work but to try understand and potentially improve, or at the very least modify.
+Original creators of this paper and extension are named at the top of this
+markdown file, have a look.
