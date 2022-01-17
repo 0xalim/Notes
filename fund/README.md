@@ -43,3 +43,52 @@ Lists networks found via crawler throughout the entire internet. One of best
 passive reconnaisance tools.
 
 Use: shodain.io
+
+### traceroute
+
+Determine ip address of all machines hopped until destination. Works by setting
+ttl to 1 of a udp packet. When TTL goes to 0 it reveals the ip address of the
+machine. Keep incrementing by 1 to reveal all ip address of all machines hopped.
+
+Use: traceroute [HOST]
+
+### telnet
+
+Communicate with a remote system via cli. All data is in clear text.
+
+Use: telnet \[HOST] \[PORT]
+
+### netcat
+
+Functions as a client that connects to ports, or a server that listens to ports.
+
+Use: nc \[OPTIONS] \[HOST] \[PORT]
+
+l -> Listen
+v -> Verbose (vv -> very verbose)
+p -> port
+n -> Numeric only
+
+### nmap
+
+Network mapper. Lots of insane features, can even be used as a vulnerability
+scanner with NSE script options.
+
+Use: nmap \[OPTIONS] \[PORT] \[IP]
+
+(host discovery)
+sn -> No scan
+PR -> Arp packet
+PE -> ICMP packet
+PP -> ICMP timestamp
+PM -> ICMP address mask
+PS -> TCP ping (3-way if not privileged)
+PA -> TCP ACK  (3-way if not privileged)
+PU -> UDP ping
+
+(port discovery)
+sS -> TCP SYN (priv)
+sT -> TCP connect
+sU -> UDP
+T# -> 0-5(paranoid, insane) {1: irl, 4: ctf}
+--max-rate -> max packets per second
