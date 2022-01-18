@@ -90,5 +90,46 @@ PU -> UDP ping
 sS -> TCP SYN (priv)
 sT -> TCP connect
 sU -> UDP
+sX,sF,sN -> XMAS, FIN, NULL (good for stateless firewall)
+sA -> TCP ACK (good for figuring out firewall rules)
+sW -> Window Scan (same as above)
 T# -> 0-5(paranoid, insane) {1: irl, 4: ctf}
 --max-rate -> max packets per second
+
+(spoofing)
+S -> spoof ip address
+e -> network interface
+pn -> no ping
+sI -> provide zombie ip
+--spoof-mac -> spoof mac address (only if on same subnet)
+D -> add multiple decoy ip address amongst your own
+  (ME for my ip, RND for random ip)
+f -> fragment packets into 8 (ff for 16)
+mtu -> select size of packet (choose multiple of 8)
+
+(info)
+--reason -> gives reason as to its conclusion
+v -> verbose (vv for very verbose)
+d -> debug (dd for detailed debug)
+sV -> service version
+
+(nse + format)
+sC -> default script
+--script -> set specific scripts
+  (auth, broadcast, brute, default, discovery, dos, exploit, external, fuzzer,
+   intrusive, malware, safe, version, vuln)
+oN -> Normal
+oG -> Greppable
+oX -> XML
+
+### hydra
+
+Used to bruteforce login details for any service.
+
+Use: hydra -l [USER] -p \[PASS] \[OPTIONS]
+
+l -> user (-L userlist)
+p -> pass (-P passlist)
+s -> port (include service name, e.g -s 10021 ftp)
+v -> verbose (very verbose)
+o -> out file
