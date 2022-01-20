@@ -6,6 +6,8 @@ refresher on a specific tool or idea that might need a little refresher.
 Forgetting information is natural, the brain is a processing machine not a
 storage device.
 
+################################################################################
+
 ## Network
 
 ### whois
@@ -133,3 +135,20 @@ p -> pass (-P passlist)
 s -> port (include service name, e.g -s 10021 ftp)
 v -> verbose (very verbose)
 o -> out file
+
+################################################################################
+
+## Linux Privilege Escalation
+
+### OS & Kernel Info
+
+hostname -> Hostname of machine
+uname -> System information
+/proc/version -> Kernel info + additional information
+/etc/issue -> Operation system information
+ps -> Running processes {axjf, aux, aef}
+env -> Environment Variables
+sudo -l -> Higher priviliged capabilities
+netstat -> Existing connections {a, at/au, l}
+auto -> automatic tools {linpeas, linenum}
+suid bit -> find / -type f -perm -04000 -ls 2\>/dev/null
