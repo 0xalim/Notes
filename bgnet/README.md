@@ -35,3 +35,23 @@ More consistent model with Unix:
 Encapsulate data, send it; receiver breaks it down. 
 
 ## Chapter 3 Ip Addresses, Structs, and Data Munging
+
+Intro to ip addresses
+
+### 3.1 IP Address versions 4 and 6
+
+Intro to IPv4 & IPv6. 
+
+### 3.1.1 Subnets
+
+Intro to subnets, netmask.
+
+### 3.1.2 Port Numbers
+
+Intro to port numbers
+
+### 3.2 Byte Order
+
+Intro to big&little endian.
+
+### 3.3 Structs
