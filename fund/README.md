@@ -10,6 +10,14 @@ storage device.
 
 ## Network
 
+### Quick python3 server
+
+`python3 -m http.server 8000`
+
+### Scp files over
+
+scp <file> <user>@<host>:/path
+
 ### whois
 
 Find registrar, contact information, creation, update, expiration dates and
