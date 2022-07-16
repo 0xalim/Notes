@@ -160,3 +160,17 @@ sudo -l -> Higher priviliged capabilities
 netstat -> Existing connections {a, at/au, l}
 auto -> automatic tools {linpeas, linenum}
 suid bit -> find / -type f -perm -04000 -ls 2\>/dev/null
+
+################################################################################
+
+## Defense Tools & Techniques
+
+### Yara
+
+Parse through directory given yara rule file, looking for certain 'things' and
+triggering conditions based on said found things. Good for recognizing patterns
+in malware.
+
+![Yara Anatomy](https://miro.medium.com/max/875/1*gThGNPenpT-AS-gjr8JCtA.png)
+![Writing Yara Rules](https://yara.readthedocs.io/en/stable/writingrules.html)
+![Auto-create Yara Rules](https://github.com/Neo23x0/yarGen)
